@@ -5,7 +5,7 @@ build/
 
 ##### skip files
 # cmake
-.CMakeLists.txt.user
+CMakeLists.txt.user
 
 # Prerequisites
 *.d
