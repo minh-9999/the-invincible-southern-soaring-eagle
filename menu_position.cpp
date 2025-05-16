@@ -1,5 +1,7 @@
 
 #include "menu_position.h"
+#include "menu_utils.h"
+
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
@@ -8,23 +10,27 @@
 
 void positionMenus(QMainWindow* window)
 {
-    // menu Position
-    QMenu *menuPosition = new QMenu("Position", window);
+    QMenu *menuPosition = new QMenu(QObject::tr("Position"), window);
 
-    QAction *actEditPosition  = menuPosition->addAction(QIcon(":/icons/edit_icon.png"), "Edit Position");
+    QAction *actEditPosition  = menuPosition->addAction(QIcon(":/icons/edit_icon.png"), QObject::tr("Edit Position"));
     actEditPosition->setShortcut(QKeySequence("Ctrl+E"));
-    menuPosition->addSeparator();
-    QAction *actReverseBoard  = menuPosition->addAction(QIcon(":/icons/reverse_icon.png"), "Reverse Position");
+
+    // menuPosition->addSeparator();
+    MenuUtils::addFullWidthSeparator(menuPosition, 2);
+
+    QAction *actReverseBoard  = menuPosition->addAction(QIcon(":/icons/reverse_icon.png"), QObject::tr("Reverse Position"));
     actReverseBoard->setShortcut(QKeySequence("Ctrl+R"));
 
-    menuPosition->addSeparator();
-    QAction *actCopyPosition  = menuPosition->addAction(QIcon(":/icons/copy_icon.png"), "Copy Position");
+    // menuPosition->addSeparator();
+    MenuUtils::addFullWidthSeparator(menuPosition, 2);
+
+    QAction *actCopyPosition  = menuPosition->addAction(QIcon(":/icons/copy_icon.png"), QObject::tr("Copy Position"));
     actCopyPosition->setShortcut(QKeySequence("Ctrl+C"));
 
-    QAction *actCopyMoves     = menuPosition->addAction(QIcon(":/icons/copy_moves_icon.png"), "Copy MoveList");
+    QAction *actCopyMoves     = menuPosition->addAction(QIcon(":/icons/copy_moves_icon.png"), QObject::tr("Copy MoveList"));
     actCopyMoves->setShortcut(QKeySequence("Ctrl+Shift+C"));
 
-    QAction *actPastePosition = menuPosition->addAction(QIcon(":/icons/paste_icon.png"), "Paste Position/MoveList");
+    QAction *actPastePosition = menuPosition->addAction(QIcon(":/icons/paste_icon.png"), QObject::tr("Paste Position/MoveList"));
     actPastePosition->setShortcut(QKeySequence("Ctrl+V"));
 
     window->menuBar()->addMenu(menuPosition);
@@ -39,21 +45,22 @@ void positionMenus(QMainWindow* window)
 
 void addPositionActionsToToolBar(QToolBar* toolbar, QWidget* parent)
 {
-    QAction *actEditPosition  = new QAction(QIcon(":/icons/edit_icon.png"), "Edit Position", parent);
+    QAction *actEditPosition  = new QAction(QIcon(":/icons/edit_icon.png"), QObject::tr("Edit Position"), parent);
     toolbar->addAction(actEditPosition);
     toolbar->addSeparator();
 
-    QAction *actReverseBoard  = new QAction(QIcon(":/icons/reverse_icon.png"), "Reverse Position", parent);
+    QAction *actReverseBoard  = new QAction(QIcon(":/icons/reverse_icon.png"), QObject::tr("Reverse Position"), parent);
     toolbar->addAction(actReverseBoard);
     toolbar->addSeparator();
 
-    QAction *actCopyPosition  = new QAction(QIcon(":/icons/copy_icon.png"), "Copy Position", parent);
+    QAction *actCopyPosition  = new QAction(QIcon(":/icons/copy_icon.png"), QObject::tr("Copy Position"), parent);
     toolbar->addAction(actCopyPosition);
-    QAction *actCopyMoves     = new QAction(QIcon(":/icons/copy_moves_icon.png"), "Copy MoveList", parent);
-    toolbar->addAction(actCopyMoves);
-    QAction *actPastePosition = new QAction(QIcon(":/icons/paste_icon.png"), "Paste Position/MoveList", parent);
-    toolbar->addAction(actPastePosition);
 
+    QAction *actCopyMoves     = new QAction(QIcon(":/icons/copy_moves_icon.png"), QObject::tr("Copy MoveList"), parent);
+    toolbar->addAction(actCopyMoves);
+
+    QAction *actPastePosition = new QAction(QIcon(":/icons/paste_icon.png"), QObject::tr("Paste Position/MoveList"), parent);
+    toolbar->addAction(actPastePosition);
 
     QObject::connect(actEditPosition,  &QAction::triggered, parent, [=]() { QMetaObject::invokeMethod(parent, "editPosition"); });
     QObject::connect(actReverseBoard,  &QAction::triggered, parent, [=]() { QMetaObject::invokeMethod(parent, "reverseBoard"); });

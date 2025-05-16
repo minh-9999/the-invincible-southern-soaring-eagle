@@ -1,7 +1,7 @@
 #include "menu_settings.h"
 #include "ChessBoardWidget.h"
 #include "BackgroundWidget.h"
-
+#include "menu_utils.h"
 
 #include <QFileDialog>
 #include <QDir>
@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QTimer>
+#include <QMessageBox>
 
 
 MenuSettings::MenuSettings(ChessBoardWidget *chessBoard, BackgroundWidget *backgroundWidget, ClockWidget* clock)
@@ -24,7 +25,9 @@ MenuSettings::MenuSettings(ChessBoardWidget *chessBoard, BackgroundWidget *backg
     }
     else
     {
-        qDebug() << "⚠️ Warning: ClockWidget is null in MenuSettings!";
+        QMessageBox::warning(nullptr,
+                             tr("Warning"),
+                             tr("⚠️ Warning: ClockWidget is null in MenuSettings!"));
     }
 
 }
@@ -37,29 +40,32 @@ void MenuSettings::settingsMenus(QMainWindow* window, ChessBoardWidget* boardWid
     menuSettings->addAction(boardWidget->toggleArrowAct);
     menuSettings->addAction(boardWidget->toggleCoordinateAct);
 
-    QAction *toggleSoundAct = menuSettings->addAction("Enable Sound");
+    QAction *toggleSoundAct = menuSettings->addAction(tr("Enable Sound"));
     toggleSoundAct->setCheckable(true);
     toggleSoundAct->setChecked(enableSound);
 
-    QAction *toggleClockAct = menuSettings->addAction("Show Clock");
+    QAction *toggleClockAct = menuSettings->addAction(tr("Show Clock"));
     toggleClockAct->setCheckable(true);
     toggleClockAct->setChecked(showClock);
 
-    QAction *toggleWinTopAct = menuSettings->addAction("Window Topmost");
+    QAction *toggleWinTopAct = menuSettings->addAction(tr("Window Topmost"));
     toggleWinTopAct->setCheckable(true);
     toggleWinTopAct->setChecked(winTop);
 
-    menuSettings->addSeparator();
+    // menuSettings->addSeparator();
+    MenuUtils::addFullWidthSeparator(menuSettings, 2);
+
     // ✅ Reuse menu from boardWidget
     menuSettings->addMenu(boardWidget->pieceSizeMenu);
 
-    menuSettings->addSeparator();
+    // menuSettings->addSeparator();
+    MenuUtils::addFullWidthSeparator(menuSettings, 2);
 
     // ✅ Reuse actions from BackgroundWidget
     menuSettings->addAction(backgroundWidget->toggleBackgroundAction);
     menuSettings->addAction(backgroundWidget->changeBackgroundAction);
 
-    QAction *otherSettings  = menuSettings->addAction(QIcon(":/icons/other_settings_icon.png"), "Other Settings");
+    QAction *otherSettings  = menuSettings->addAction(QIcon(":/icons/other_settings_icon.png"), tr("Other Settings"));
     otherSettings ->setShortcut(QKeySequence("Ctrl+R"));
 
     window->menuBar()->addMenu(menuSettings);
@@ -94,7 +100,9 @@ void MenuSettings::setupClockGeometry()
 void MenuSettings::setEnableSound(bool enabled)
 {
     enableSound = enabled;
-    qDebug() << "[Settings] Sound" << (enabled ? "enabled" : "disabled");
+    QMessageBox::information(nullptr,
+                             tr("Settings"),
+                             tr("Sound has been %1.").arg(enabled ? tr("enabled") : tr("disabled")));
 
     if (!enabled)
     {
@@ -108,7 +116,9 @@ void MenuSettings::setEnableSound(bool enabled)
 
     if (!soundDir.exists())
     {
-        qWarning() << "[Sound] Directory does not exist:" << soundDirPath;
+        QMessageBox::warning(nullptr,
+                             tr("Sound Error"),
+                             tr("Sound directory does not exist:\n%1").arg(soundDirPath));
         return;
     }
 
@@ -171,7 +181,10 @@ void MenuSettings::playSound(const QString& soundName)
     }
     else
     {
-        qWarning() << "[Sound] Not found:" << soundName;
+        // qWarning() << "[Sound] Not found:" << soundName;
+        QMessageBox::warning(nullptr,
+                             tr("Sound Not Found"),
+                             tr("Sound not found: %1").arg(soundName));
     }
 }
 
@@ -186,7 +199,8 @@ void MenuSettings::setShowClock(bool enabled)
 
 void MenuSettings::setWindowTopmost(bool enabled)
 {
-    qDebug() << "[Settings] Window topmost" << (enabled ? "enabled" : "disabled");
+    // qDebug() << "[Settings] Window topmost" << (enabled ? "enabled" : "disabled");
+    QMessageBox::information(nullptr, tr("Window Topmost"), tr("Window topmost %1").arg(enabled?tr("enabled") : tr("disabled")));
 
     auto mainWindow = qobject_cast<QMainWindow *>(parent());
     if (!mainWindow)

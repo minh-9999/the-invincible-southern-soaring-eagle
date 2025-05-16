@@ -1,4 +1,6 @@
 #include "menu_connection.h"
+#include "menu_utils.h"
+
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
@@ -11,32 +13,33 @@ MenuConnection::MenuConnection(QObject* parent)
 
 void MenuConnection::connectionMenus(QMainWindow* window)
 {
-    QMenu* connectionMenu = new QMenu("Connection", window);
+    QMenu* connectionMenu = new QMenu(tr("Connection"), window);
 
-    QAction* settingsAct = connectionMenu->addAction(QIcon(":/icons/connection_settings_icon.png"), "Connection Settings...");
+    QAction* settingsAct = connectionMenu->addAction(QIcon(":/icons/connection_settings_icon.png"), tr("Connection Settings..."));
     settingsAct->setShortcut(QKeySequence("Ctrl+T"));
 
-    QAction* newConnAct = connectionMenu->addAction(QIcon(":/icons/connection_add_icon.png"), "New Connection...");
+    QAction* newConnAct = connectionMenu->addAction(QIcon(":/icons/connection_add_icon.png"), tr("New Connection..."));
     newConnAct->setShortcut(QKeySequence("Ctrl+Shift+N"));
 
-    QAction* editConnAct = connectionMenu->addAction(QIcon(":/icons/edit_connection_icon.png"), "Edit Connection...");
+    QAction* editConnAct = connectionMenu->addAction(QIcon(":/icons/edit_connection_icon.png"), tr("Edit Connection..."));
     editConnAct->setShortcut(QKeySequence("Ctrl+X"));
 
-    QAction* connectToAct = connectionMenu->addAction(QIcon(":/icons/connect_to_icon.png"), "Connect To");
+    QAction* connectToAct = connectionMenu->addAction(QIcon(":/icons/connect_to_icon.png"), tr("Connect To"));
     connectToAct->setShortcut(QKeySequence("Ctrl+Q"));
 
-    QAction* debugInfoAct = connectionMenu->addAction(QIcon(":/icons/debug_icon.png"), "Show Debug Info");
+    QAction* debugInfoAct = connectionMenu->addAction(QIcon(":/icons/debug_icon.png"), tr("Show Debug Info"));
     debugInfoAct->setShortcut(QKeySequence("Ctrl+D"));
 
-    connectionMenu->addSeparator();
+    // connectionMenu->addSeparator();
+    MenuUtils::addFullWidthSeparator(connectionMenu, 2);
 
-    QAction* manualModeAct = connectionMenu->addAction(QIcon(":/icons/manual_icon.png"), "Manual Mode");
+    QAction* manualModeAct = connectionMenu->addAction(QIcon(":/icons/manual_icon.png"), tr("Manual Mode"));
     manualModeAct->setShortcut(QKeySequence("Ctrl+Shift+M"));
 
-    QAction* transmitAct = connectionMenu->addAction(QIcon(":/icons/transmit_icon.png"), "Transmit To Game");
+    QAction* transmitAct = connectionMenu->addAction(QIcon(":/icons/transmit_icon.png"), tr("Transmit To Game"));
     transmitAct->setShortcut(Qt::Key_F5);
 
-    QAction* autoClickAct = connectionMenu->addAction(QIcon(":/icons/auto_click_icon.png"), "Auto Click");
+    QAction* autoClickAct = connectionMenu->addAction(QIcon(":/icons/auto_click_icon.png"), tr("Auto Click"));
     autoClickAct->setShortcut(QKeySequence("Ctrl+Shift+C"));
 
     window->menuBar()->addMenu(connectionMenu);
@@ -53,30 +56,30 @@ void MenuConnection::connectionMenus(QMainWindow* window)
 
 void MenuConnection::addConnectActionsToToolBar(QToolBar *toolBar, QWidget *parent)
 {
-    QAction* settingsAct = new QAction(QIcon(":/icons/connection_settings_icon.png"), "Connection Settings...", parent);
+    QAction* settingsAct = new QAction(QIcon(":/icons/connection_settings_icon.png"), tr("Connection Settings..."), parent);
     toolBar->addAction(settingsAct);
 
-    QAction* newConnAct =  new QAction(QIcon(":/icons/connection_add_icon.png"), "New Connection...", parent);
+    QAction* newConnAct = new QAction(QIcon(":/icons/connection_add_icon.png"), tr("New Connection..."), parent);
     toolBar->addAction(newConnAct);
 
-    QAction* editConnAct =  new QAction(QIcon(":/icons/edit_connection_icon.png"), "Edit Connection...", parent);
+    QAction* editConnAct = new QAction(QIcon(":/icons/edit_connection_icon.png"), tr("Edit Connection..."), parent);
     toolBar->addAction(editConnAct);
 
-    QAction* connectToAct =  new QAction(QIcon(":/icons/connect_to_icon.png"), "Connect To", parent);
+    QAction* connectToAct = new QAction(QIcon(":/icons/connect_to_icon.png"), tr("Connect To"), parent);
     toolBar->addAction(connectToAct);
 
-    QAction* debugInfoAct =  new QAction(QIcon(":/icons/debug_icon.png"), "Show Debug Info", parent);
+    QAction* debugInfoAct = new QAction(QIcon(":/icons/debug_icon.png"), tr("Show Debug Info"), parent);
     toolBar->addAction(debugInfoAct);
 
     toolBar->addSeparator();
 
-    QAction* manualModeAct =  new QAction(QIcon(":/icons/manual_icon.png"), "Manual Mode", parent);
+    QAction* manualModeAct = new QAction(QIcon(":/icons/manual_icon.png"), tr("Manual Mode"), parent);
     toolBar->addAction(manualModeAct);
 
-    QAction* transmitAct =  new QAction(QIcon(":/icons/transmit_icon.png"), "Transmit To Game", parent);
+    QAction* transmitAct = new QAction(QIcon(":/icons/transmit_icon.png"), tr("Transmit To Game"), parent);
     toolBar->addAction(transmitAct);
 
-    QAction* autoClickAct =  new QAction(QIcon(":/icons/auto_click_icon.png"), "Auto Click", parent);
+    QAction* autoClickAct = new QAction(QIcon(":/icons/auto_click_icon.png"), tr("Auto Click"), parent);
     toolBar->addAction(autoClickAct);
 
     QObject::connect(settingsAct, &QAction::triggered, parent, [=]() { QMetaObject::invokeMethod(parent, "onConnectionSettings"); });
@@ -93,40 +96,41 @@ void MenuConnection::addConnectActionsToToolBar(QToolBar *toolBar, QWidget *pare
 
 void MenuConnection::onConnectionSettings()
 {
-    QMessageBox::information(nullptr, "Settings", "Open connection settings.");
+    QMessageBox::information(nullptr, tr("Settings"), tr("Open connection settings."));
 }
 
 void MenuConnection::onNewConnection()
 {
-    QMessageBox::information(nullptr, "New", "Create a new connection.");
+    QMessageBox::information(nullptr, tr("New"), tr("Create a new connection."));
 }
 
 void MenuConnection::onEditConnection()
 {
-    QMessageBox::information(nullptr, "Edit", "Edit an existing connection.");
+    QMessageBox::information(nullptr, tr("Edit"), tr("Edit an existing connection."));
 }
 
 void MenuConnection::onConnectTo()
 {
-    QMessageBox::information(nullptr, "Connect", "Connecting to game...");
+    QMessageBox::information(nullptr, tr("Connect"), tr("Connecting to game..."));
 }
 
 void MenuConnection::onShowDebugInfo()
 {
-    QMessageBox::information(nullptr, "Debug Info", "Showing debug information.");
+    QMessageBox::information(nullptr, tr("Debug Info"), tr("Showing debug information."));
 }
 
 void MenuConnection::onManualMode()
 {
-    QMessageBox::information(nullptr, "Manual Mode", "Switched to manual mode.");
+    QMessageBox::information(nullptr, tr("Manual Mode"), tr("Switched to manual mode."));
 }
 
 void MenuConnection::onTransmitToGame()
 {
-    QMessageBox::information(nullptr, "Transmit", "Transmitting data to game.");
+    QMessageBox::information(nullptr, tr("Transmit"), tr("Transmitting data to game."));
 }
 
 void MenuConnection::onAutoClick()
 {
-    QMessageBox::information(nullptr, "Auto Click", "Auto click activated.");
+    QMessageBox::information(nullptr, tr("Auto Click"), tr("Auto click activated."));
 }
+

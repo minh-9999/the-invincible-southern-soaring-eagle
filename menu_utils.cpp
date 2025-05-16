@@ -3,31 +3,20 @@
 #include <QWidgetAction>
 #include <QFrame>
 #include <QVBoxLayout>
+#include <QLabel>
 
 void MenuUtils::addFullWidthSeparator(QMenu* menu, int height)
 {
     if (!menu) return;
 
-    QWidget* container = new QWidget(menu);
-    container->setFixedHeight(height);
+    QLabel* separatorLabel = new QLabel(menu);
+    separatorLabel->setFixedHeight(height > 0 ? height : 2);
+    separatorLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    separatorLabel->setStyleSheet("background-color: #a0a0a0; margin: 0; padding: 0;");
 
-    QVBoxLayout* layout = new QVBoxLayout(container);
-    layout->setContentsMargins(8, 0, 8, 0);
-    layout->setSpacing(0);
-
-    QFrame* line = new QFrame(container);
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-    line->setStyleSheet("background-color: #c0c0c0;");
-    line->setFixedHeight(height);
-
-    layout->addWidget(line);
-    container->setLayout(layout);
-
-    QWidgetAction* separator = new QWidgetAction(menu);
-    separator->setDefaultWidget(container);
-
-    menu->addAction(separator);
+    QWidgetAction* separatorAction = new QWidgetAction(menu);
+    separatorAction->setDefaultWidget(separatorLabel);
+    menu->addAction(separatorAction);
 }
 
 

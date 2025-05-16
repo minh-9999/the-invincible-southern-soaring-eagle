@@ -1,9 +1,12 @@
 #include "ChessBoardWidget.h"
+#include "PieceLoader.h"
+#include "menu_utils.h"
+
 #include <QPainter>
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QMenu>
-#include "PieceLoader.h"
+
 #include <QFile>
 #include <QTextStream>
 #include <QRegularExpression>
@@ -11,12 +14,22 @@
 #include <QPushButton>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QCoreApplication>
 
 
 ChessBoardWidget::ChessBoardWidget(QWidget *parent, BoardSize size)
     : QWidget(parent), boardSize(size)
 {
-    boardImage = QPixmap(":/img/middle/board.bmp");
+    baseImagePath = QCoreApplication::applicationDirPath() + "/img";
+    setBoardSize(size);
+
+    // QString defaultBoardPath = baseImagePath + "/middle/board.bmp";
+    // boardImage = QPixmap(defaultBoardPath);
+
+    // if (boardImage.isNull())
+    // {
+    //     qWarning() << "Failed to load board image at" << defaultBoardPath;
+    // }
 
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &QWidget::customContextMenuRequested,
@@ -25,12 +38,12 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent, BoardSize size)
     updateSizeFromBoard();
     resetBoard();
 
-    pieceSizeMenu = new QMenu("Piece Size", this);
+    pieceSizeMenu = new QMenu(tr("Piece Size"), this);
     pieceSizeMenu->setIcon(QIcon(":/icons/size_icon.png"));
 
-    smallPieceAct  = pieceSizeMenu->addAction("Small");
-    mediumPieceAct = pieceSizeMenu->addAction("Medium");
-    largePieceAct  = pieceSizeMenu->addAction("Large");
+    smallPieceAct  = pieceSizeMenu->addAction(tr("Small"));
+    mediumPieceAct = pieceSizeMenu->addAction(tr("Medium"));
+    largePieceAct  = pieceSizeMenu->addAction(tr("Large"));
 
     // Connect actions
     connect(smallPieceAct, &QAction::triggered, this, [this]() {
@@ -51,57 +64,52 @@ ChessBoardWidget::ChessBoardWidget(QWidget *parent, BoardSize size)
     connect(copyMoveListAct, &QAction::triggered, this, &ChessBoardWidget::onCopyMoveList);
     connect(pastePositionAct, &QAction::triggered, this, &ChessBoardWidget::onPastePosition);
 
-    actCopyPosition = new QAction(QIcon(":/icons/copy_icon.png"), "Copy Position", this);
+    actCopyPosition = new QAction(QIcon(":/icons/copy_icon.png"), tr("Copy Position"), this);
     actCopyPosition->setShortcut(QKeySequence("Ctrl+C"));
     addAction(actCopyPosition);
     connect(actCopyPosition, &QAction::triggered, this, &::ChessBoardWidget::requestEditPosition);
 
-    actCopyMoveList = new QAction(QIcon(":/icons/copy_moves_icon.png"), "Copy Move List", this);
+    actCopyMoveList = new QAction(QIcon(":/icons/copy_moves_icon.png"), tr("Copy Move List"), this);
     actCopyMoveList->setShortcut(QKeySequence("Ctrl+Shift+C"));
     addAction(actCopyMoveList);
     connect(actCopyMoveList, &QAction::triggered, this, &ChessBoardWidget::copyMoveListRequested);
 
-    actPastePosition = new QAction(QIcon(":/icons/paste_icon.png"), "Paste Position", this);
+    actPastePosition = new QAction(QIcon(":/icons/paste_icon.png"), tr("Paste Position"), this);
     actPastePosition->setShortcut(QKeySequence("Ctrl+V"));
     addAction(actPastePosition);
     connect(actPastePosition, &QAction::triggered, this, &ChessBoardWidget::pastePositionRequested);
 
-    actAnalyzeMode = new QAction(QIcon(":/icons/analyze_icon.png"), "Analyze Mode", this);
+    actAnalyzeMode = new QAction(QIcon(":/icons/analyze_icon.png"), tr("Analyze Mode"), this);
     actAnalyzeMode->setShortcut(QKeySequence("Ctrl+G"));
     addAction(actAnalyzeMode);
     connect(actAnalyzeMode, &QAction::triggered, this, &ChessBoardWidget::requestAnalyzeMode);
 
-    actChangeMove = new QAction(QIcon(":/icons/change_moves_icon.png"), "Change Move", this);
+    actChangeMove = new QAction(QIcon(":/icons/change_moves_icon.png"), tr("Change Move"), this);
     actChangeMove->setShortcut(QKeySequence("Ctrl+J"));
     addAction(actChangeMove);
     connect(actChangeMove, &QAction::triggered, this, &ChessBoardWidget::requestChangeMove);
 
-    actMoveNow = new QAction(QIcon(":/icons/moves_now_icon.png"), "Move Now", this);
+    actMoveNow = new QAction(QIcon(":/icons/moves_now_icon.png"), tr("Move Now"), this);
     actMoveNow->setShortcut(QKeySequence("Ctrl+M"));
     addAction(actMoveNow);
     connect(actMoveNow, &QAction::triggered, this, &ChessBoardWidget::requestMoveNow);
 
-    actEditPosition = new QAction(QIcon(":/icons/edit_icon.png"), "Edit Position", this);
+    actEditPosition = new QAction(QIcon(":/icons/edit_icon.png"), tr("Edit Position"), this);
     actEditPosition->setShortcut(QKeySequence("Ctrl+E"));
     addAction(actEditPosition);
     connect(actEditPosition, &QAction::triggered, this, &ChessBoardWidget::requestEditPosition);
 
     // for showContextMenu function
-    toggleArrowAct = new QAction("Show Move Arrow", this);
+    toggleArrowAct = new QAction(tr("Show Move Arrow"), this);
     toggleArrowAct->setCheckable(true);
     toggleArrowAct->setChecked(showArrow);
     connect(toggleArrowAct, &QAction::toggled, this, &ChessBoardWidget::onToggleArrow);
 
     // for showContextMenu function
-    toggleCoordinateAct = new QAction("Show Coordinate", this);
+    toggleCoordinateAct = new QAction(tr("Show Coordinate"), this);
     toggleCoordinateAct->setCheckable(true);
     toggleCoordinateAct->setChecked(showCoordinate);
     connect(toggleCoordinateAct, &QAction::toggled, this, &ChessBoardWidget::onToggleCoordinate);
-
-
-    // qDebug() << "[ChessBoardWidget] actChangeMove = " << actChangeMove;
-    // qDebug() << "[ChessBoardWidget] actMoveNow = " << actMoveNow;
-
 
 }
 
@@ -118,7 +126,13 @@ void ChessBoardWidget::loadBoardImage(BoardSize size)
         case BoardSize::Mini:   folder = "mini"; break;
     }
 
-    boardImage = QPixmap(QString(":/img/%1/board.bmp").arg(folder));
+    QString fullPath = baseImagePath + "/" + folder + "/board.bmp";
+    boardImage = QPixmap(fullPath);
+
+    if (boardImage.isNull())
+    {
+        qWarning() << "Failed to load board image:" << fullPath;
+    }
 }
 
 QPixmap ChessBoardWidget::removeBorder(const QPixmap &pixmap)
@@ -188,7 +202,7 @@ QPixmap ChessBoardWidget::autoRemoveBorder(const QPixmap& pixmap, int tolerance 
 
                 if (dr <= tolerance && dg <= tolerance && db <= tolerance)
                 {
-                    image.setPixelColor(x, y, QColor(0, 0, 0, 0)); // Trong suốt
+                    image.setPixelColor(x, y, QColor(0, 0, 0, 0)); // Transparent
                     break;
                 }
             }
@@ -357,21 +371,31 @@ void ChessBoardWidget::loadPieceImages()
     piecePixmaps.clear();
     QString folder;
 
+    // qDebug() << "\n\n baseImagePath = " << baseImagePath<< "\n\n";
+
     switch (pieceSize)
     {
-    case PieceSize::Small:  folder = ":/img/small/";  break;
-    case PieceSize::Medium: folder = ":/img/middle/"; break;
-    case PieceSize::Large:  folder = ":/img/large/";  break;
+        case PieceSize::Small:  folder =  baseImagePath + "/small/";  break;
+        case PieceSize::Medium: folder =  baseImagePath + "/middle/"; break;
+        case PieceSize::Large:  folder =  baseImagePath + "/large/";  break;
     }
 
     // Iterate through piece types and colors
-    for (const auto& pieceType : { "r", "a", "b", "c", "p", "k", "n" }) // Piece type examples: r, a, b, c, p, k, n
-    {
-        for (const auto& color : { "r", "b" }) // Piece color: red (r), black (b)
-        {
-            QString path = folder + QString(color) + QString(pieceType) + ".png";
+    // Piece type examples: r, a, b, c, p, k, n
+    QStringList colors = { "r", "b" };
+    // Piece color: red (r), black (b)
+    QStringList types  = { "a", "b", "c", "k", "n", "p", "r" };
 
-            piecePixmaps[ QString(color) + QString(pieceType)] = QPixmap(path);
+    for (const auto& pieceType : types)
+    {
+        for (const auto& color : colors)
+        {
+            QString fileName = QString(color) + QString(pieceType) + ".bmp";
+            QString fullPath = folder + fileName;
+            // qDebug() << "\n Loading image from file:  " << fullPath;
+
+            QPixmap pixmap(fullPath);
+            piecePixmaps[QString(color) + QString(pieceType)] = pixmap;
         }
     }
 }
@@ -393,11 +417,14 @@ QPixmap ChessBoardWidget::getPiecePixmap(const Piece& piece) const
 }
 
 
+// ***************************************************************************************
+
 void ChessBoardWidget::mousePressEvent(QMouseEvent *event)
 {
     int cols = 9, rows = 10;
     int cellWidth = width() / cols;
     int cellHeight = height() / rows;
+
     QPoint pos = event->position().toPoint();
     int col = pos.x() / cellWidth;
     int row = pos.y() / cellHeight;
@@ -407,7 +434,7 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent *event)
         selectedCell = QPoint(col, row);
         update();
     }
-    // qDebug() << "Clicked cell:" << col << row;
+
 }
 
 
@@ -473,8 +500,6 @@ QPoint ChessBoardWidget::cellToPixel(int row, int col) const
     return QPoint(centerX - pieceSize / 2 + offsetX,
                   centerY - pieceSize / 2 + offsetY);
 
-    // return QPoint(centerX - pieceSize / 2 + offsetX,
-    //               centerY - pieceSize / 2 + offsetY) + offset;
 }
 
 
@@ -494,63 +519,96 @@ void ChessBoardWidget::updateSizeFromBoard()
     int baseWidth = boardImage.width();
     int baseHeight = boardImage.height();
 
-    switch (currentSize)
-    {
-    case BoardSize::Small:
-        setFixedSize(baseWidth, baseHeight);
-        break;
+    // switch (currentSize)
+    // {
+    // case BoardSize::Small:
+    //     setFixedSize(baseWidth, baseHeight);
+    //     break;
 
-    case BoardSize::Medium:
-        setFixedSize(baseWidth, baseHeight);
-        break;
+    // case BoardSize::Medium:
+    //     setFixedSize(baseWidth, baseHeight);
+    //     break;
 
-    case BoardSize::Large:
-        setFixedSize(baseWidth, baseHeight);
-        break;
+    // case BoardSize::Large:
+    //     setFixedSize(baseWidth, baseHeight);
+    //     break;
 
-    case BoardSize::Mini:
-        // Mini not used in main widget, ignore resize
-        break;
+    // case BoardSize::Mini:
+    //     // Mini not used in main widget, ignore resize
+    //     break;
 
-    default:
-        qWarning() << "Unknown board size!";
-        break;
-    }
+    // default:
+    //     qWarning() << "Unknown board size!";
+    //     break;
+    // }
+
+    qDebug() << "\n Updating widget size to:  " << baseWidth << "x" << baseHeight;
+
+    setFixedSize(baseWidth, baseHeight);
+    updateGeometry();
 }
 
 void ChessBoardWidget::setBoardSize(BoardSize size)
 {
     currentSize = size;
+    QString folder;
 
     switch (size)
     {
-    case BoardSize::Small:
-        boardImage = QPixmap(":/img/small/board.bmp");
-        break;
+        case BoardSize::Small:
+            folder = "small";
+            break;
 
-    case BoardSize::Medium:
-        boardImage = QPixmap(":/img/middle/board.bmp");
-        break;
+        case BoardSize::Medium:
+            folder = "middle";
+            break;
 
-    case BoardSize::Large:
-        boardImage = QPixmap(":/img/large/board.bmp");
-        break;
+        case BoardSize::Large:
+            folder = "large";
+            break;
 
-    case BoardSize::Mini:
-        // Do not change boardImage or main board size
-        return;
+        case BoardSize::Mini:
+            return; // Do not change boardImage or main board size
     }
+
+    QString fullPath = baseImagePath + "/" + folder + "/board.bmp";
+    boardImage = QPixmap(fullPath);
 
     // Reload the board image and update the widget size
     loadBoardImage(size);
+
+    qDebug() << "\n  [DEBUG] boardImage size loaded =" << boardImage.size();
+
     updateSizeFromBoard();
 
-    // Update the piece size
-    loadPieceImages(); // Call again to reload the piece with the new size
+    // Map board size to piece size
+    PieceSize pieceSize;
 
-    // Reload all the piece images if needed
+    if (size == BoardSize::Small)
+        pieceSize = PieceSize::Small;
+
+    else if (size == BoardSize::Medium)
+        pieceSize = PieceSize::Medium;
+
+    else if (size == BoardSize::Large)
+        pieceSize = PieceSize::Large;
+
+    setPieceSize(pieceSize); // ✅ calling the correct function will resize + update the unit
+
     update(); // Call again paintEvent
 }
+
+
+QSize ChessBoardWidget::sizeHint() const
+{
+    if (boardImage.isNull())
+        return QSize(400, 400); // fallback
+
+    QSize sz = boardImage.size(); // or calculated by boardSize
+    qDebug() << "[sizeHint] returning: " << sz;
+    return sz;
+}
+
 
 // ----------------------------------------------------
 
@@ -582,19 +640,22 @@ void ChessBoardWidget::showContextMenu(const QPoint &pos)
     menu.addAction(toggleArrowAct);
     menu.addAction(toggleCoordinateAct);
 
-    menu.addSeparator();
+    // menu.addSeparator();
+    MenuUtils::addFullWidthSeparator(&menu, 2);
 
     menu.addAction(actCopyPosition);
     menu.addAction(actCopyMoveList);
     menu.addAction(actPastePosition);
 
-    menu.addSeparator(); //
+    // menu.addSeparator();
+    MenuUtils::addFullWidthSeparator(&menu, 2);
 
     menu.addAction(actAnalyzeMode);
     menu.addAction(actChangeMove);
     menu.addAction(actMoveNow);
 
-    menu.addSeparator(); //
+    // menu.addSeparator();
+    MenuUtils::addFullWidthSeparator(&menu, 2);
     menu.addAction(actEditPosition);
 
     menu.exec(pos);  // Show context menu
@@ -801,7 +862,8 @@ bool ChessBoardWidget::loadCHE(const QString& filePath)
 bool ChessBoardWidget::loadMXQ(const QString& filePath)
 {
     QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly))
+    {
         QMessageBox::warning(this, "Error", "Failed to open MXQ file.");
         return false;
     }
@@ -829,7 +891,8 @@ QString ChessBoardWidget::getPositionData()
         QStringList pieces;
         pieces.reserve(rowData.size());
 
-        for (int col = 0; col < rowData.size(); ++col) {
+        for (int col = 0; col < rowData.size(); ++col)
+        {
             pieces << rowData[col].toString();
         }
 
@@ -838,8 +901,6 @@ QString ChessBoardWidget::getPositionData()
 
     return lines.join("\n");
 }
-
-
 
 
 void ChessBoardWidget::setPositionData(const QString& data)
@@ -954,7 +1015,8 @@ void ChessBoardWidget::setupInitialPosition()
 
 void ChessBoardWidget::stepForward()
 {
-    if (currentMoveIndex >= moves.size()) {
+    if (currentMoveIndex >= moves.size())
+    {
         qDebug() << "No more moves.";
         return;
     }
@@ -971,15 +1033,18 @@ void ChessBoardWidget::stepForward()
 // Check for valid chess piece symbols
 bool ChessBoardWidget::isValidPiece(const QString& piece)
 {
-    return (piece == "P" || piece == "N" || piece == "B" || piece == "R" || piece == "Q" || piece == "K" || piece == "p" || piece == "n" || piece == "b" || piece == "r" || piece == "q" || piece == "k");
+    static const QSet<QString> validPieces = {
+        // Red piece
+        "車", "馬", "相", "仕", "帥", "炮", "兵",
+        // Black piece
+        "車", "馬", "象", "士", "將", "炮", "卒"
+    };
+    return validPieces.contains(piece);
 }
 
 void ChessBoardWidget::setPieceSize(PieceSize size)
 {
     pieceSize = size; // Update the size of the piece
-
-    // Update the piece interface
-    // updatePieceSize();
 
     loadPieceImages();
     update(); // Update the board interface
@@ -1110,7 +1175,7 @@ void ChessBoardWidget::onPositionEdited()
 void ChessBoardWidget::onToggleArrow(bool checked)
 {
     showArrow = checked;
-    qDebug() << "[ChessBoardWidget] Show move arrow:" << (showArrow ? "Enabled" : "Disabled");
+    // qDebug() << "[ChessBoardWidget] Show move arrow:" << (showArrow ? "Enabled" : "Disabled");
 
     update();
 }
@@ -1118,7 +1183,7 @@ void ChessBoardWidget::onToggleArrow(bool checked)
 void ChessBoardWidget::onToggleCoordinate(bool checked)
 {
     showCoordinate = checked;
-    qDebug() << "[ChessBoardWidget] Show coordinates:" << (showCoordinate ? "Enabled" : "Disabled");
+    // qDebug() << "[ChessBoardWidget] Show coordinates:" << (showCoordinate ? "Enabled" : "Disabled");
 
     update();
 }
@@ -1135,7 +1200,8 @@ void ChessBoardWidget::highlightCurrentMove()
         qDebug() << "[ChessBoardWidget] Highlighting move from"
                  << currentMoveStart << "to" << currentMoveEnd;
     }
-    else {
+    else
+    {
         qDebug() << "[ChessBoardWidget] No move to highlight.";
     }
 
@@ -1147,7 +1213,7 @@ void ChessBoardWidget::saveMoveToHistory()
     move.start = currentMoveStart;
     move.end = currentMoveEnd;
     move.movedPiece = board[currentMoveStart.x()][currentMoveStart.y()];
-    move.capturedPiece = board[currentMoveEnd.x()][currentMoveEnd.y()];  // hoặc Piece::empty() nếu không ăn quân
+    move.capturedPiece = board[currentMoveEnd.x()][currentMoveEnd.y()];
 
     moveHistory.append(move);
 

@@ -1,14 +1,26 @@
 
 #include "BackgroundWidget.h"
+
 #include <QPainter>
 #include <QMenu>
 #include <QFileDialog>
 #include <QPushButton>
+#include <QCoreApplication>
 
-BackgroundWidget::BackgroundWidget(QWidget *parent)
-    : QWidget(parent)
+BackgroundWidget::BackgroundWidget(QWidget *parent): QWidget(parent)
 {
-    backgroundImage = QPixmap(":/img/bg/bg5.jpg");  // default
+    baseImagePath = QCoreApplication::applicationDirPath() + "/img";
+
+    QString bgFolder = baseImagePath + "/bg/";
+    QString defaultBgPath = bgFolder + "bg5.jpg";
+
+    backgroundImage = QPixmap(defaultBgPath);  // default background
+
+    if (backgroundImage.isNull())
+    {
+        qWarning() << "Failed to load background image at" << defaultBgPath;
+    }
+
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     changeBackgroundAction = new QAction(QIcon(":/icons/change_background_icon.png"),
@@ -23,7 +35,7 @@ BackgroundWidget::BackgroundWidget(QWidget *parent)
     connect(this, &QWidget::customContextMenuRequested,
             this, &BackgroundWidget::showContextMenu);
 
-    initBackgroundImages(":/img/bg");
+    initBackgroundImages(bgFolder);
     update();
 }
 
@@ -57,8 +69,13 @@ void BackgroundWidget::changeBackground()
     if (backgroundImages.isEmpty())
         return;
 
-    QString imagePath = QDir("path/to/background/folder").filePath(backgroundImages[currentBackgroundIndex]);
-    backgroundImage.load(imagePath);
+    QString imagePath = backgroundImages[currentBackgroundIndex];
+
+    if (!backgroundImage.load(imagePath))
+    {
+        qWarning() << "Failed to load background image:" << imagePath;
+    }
+
     update(); // Trigger repaint
 
     currentBackgroundIndex = (currentBackgroundIndex + 1) % backgroundImages.size();

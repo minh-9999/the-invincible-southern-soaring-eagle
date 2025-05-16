@@ -6,7 +6,7 @@
 
 namespace PieceLoader
 {
-QPixmap loadPiecePixmap(PieceType type, bool isRed, ChessBoardWidget::BoardSize size);
+QPixmap loadPiecePixmap(PieceType type, bool isRed, ChessBoardWidget::BoardSize boardSize);
 
 void drawPieceAt(QPainter& painter, PieceType type, bool isRed, int row, int col,
                  int cellSize, ChessBoardWidget::BoardSize size);

@@ -14,6 +14,9 @@ A modern, cross-platform Chinese Chess (Xiangqi) game with sleek UI, player time
 - 🔌 Modular design ready for AI engine (PGN/XQF/CHE/MXQ support)
 - 💻 Cross-platform: tested on Windows, macOS, Linux
 
+
+![Screenshot](https://i.ibb.co/zvKStGT/anh-mieu-ta.png)
+
 ---
 
 ## ⚙️ Build Instructions
@@ -58,7 +61,6 @@ Web UI backend (optional)
 ---
 
 ## 🛠️ Contribution
-
 
 Want to join? Contributions are welcome! Just fork, create a branch, and PR:
 

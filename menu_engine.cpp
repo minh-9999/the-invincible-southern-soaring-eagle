@@ -19,40 +19,23 @@ MenuEngine::MenuEngine(ChessBoardWidget *bWidget)
 
 void MenuEngine::engineMenus(QMainWindow* window)
 {
-    // Engine menu
-    QMenu *engineMenu = new QMenu("Engine", window);
+    QMenu *engineMenu = new QMenu(tr("Engine"), window);
 
-    QAction *engineSettingAct = engineMenu->addAction(QIcon(":/icons/setting_icon.png"), "Engine Setting");
+    QAction *engineSettingAct = engineMenu->addAction(QIcon(":/icons/setting_icon.png"), tr("Engine Setting"));
     engineSettingAct->setShortcut(QKeySequence("Ctrl+K"));
 
-    QAction *engineBlackAct = engineMenu->addAction(QIcon(":/icons/black_icon.png"), "Engine Black");
+    QAction *engineBlackAct = engineMenu->addAction(QIcon(":/icons/black_icon.png"), tr("Engine Black"));
     engineBlackAct->setShortcut(QKeySequence("Ctrl+B"));
 
-    QAction *engineRedAct = engineMenu->addAction(QIcon(":/icons/red_icon.png"), "Engine Red");
+    QAction *engineRedAct = engineMenu->addAction(QIcon(":/icons/red_icon.png"), tr("Engine Red"));
     engineRedAct->setShortcut(QKeySequence("Ctrl+R"));
 
-    QAction *analyzeModeAct = engineMenu->addAction(QIcon(":/icons/analyze_icon.png"), "Analyze Mode");
+    QAction *analyzeModeAct = engineMenu->addAction(QIcon(":/icons/analyze_icon.png"), tr("Analyze Mode"));
     analyzeModeAct->setShortcut(QKeySequence("Ctrl+A"));
 
     // ✅ Reuse actions from boardWidget
-    if (boardWidget)
-    {
-        if (boardWidget->actChangeMove)
-            engineMenu->addAction(boardWidget->actChangeMove);
-
-        else
-            qWarning() << "[MenuEngine] actChangeMove is nullptr!";
-
-        if (boardWidget->actMoveNow)
-            engineMenu->addAction(boardWidget->actMoveNow);
-
-        else
-            qWarning() << "[MenuEngine] actMoveNow is nullptr!";
-    }
-    else
-    {
-        qCritical() << "[MenuEngine] boardWidget is nullptr!";
-    }
+    engineMenu->addAction(boardWidget->actChangeMove);
+    engineMenu->addAction(boardWidget->actMoveNow);
 
     window->menuBar()->addMenu(engineMenu);
 
@@ -64,48 +47,28 @@ void MenuEngine::engineMenus(QMainWindow* window)
     // connect(changeMoveAct, &QAction::triggered, this, &MenuEngine::onChangeMove);
     // connect(moveNowAct, &QAction::triggered, this, &MenuEngine::onMoveNow);
 
-
-    // Show the menu
-    // menu.exec(boardWidget->mapToGlobal(pos)); // Show the context menu at mouse position
 }
 
 void MenuEngine::addEngineActionsToToolBar(QToolBar *toolbar, QWidget* parent)
 {
-    QAction *engineSettingAct = new QAction(QIcon(":/icons/setting_icon.png"), "Engine Setting", parent);
+    QAction *engineSettingAct = new QAction(QIcon(":/icons/setting_icon.png"), tr("Engine Setting"), parent);
     toolbar->addAction(engineSettingAct);
 
     toolbar->addSeparator();
-    QAction *engineBlackAct = new QAction(QIcon(":/icons/black_icon.png"), "Engine Black", parent);
+
+    QAction *engineBlackAct = new QAction(QIcon(":/icons/black_icon.png"), tr("Engine Black"), parent);
     toolbar->addAction(engineBlackAct);
 
-    QAction *engineRedAct = new QAction(QIcon(":/icons/red_icon.png"), "Engine Red", parent);
+    QAction *engineRedAct = new QAction(QIcon(":/icons/red_icon.png"), tr("Engine Red"), parent);
     toolbar->addAction(engineRedAct);
 
     toolbar->addSeparator();
 
-    QAction *analyzeModeAct = new QAction(QIcon(":/icons/analyze_icon.png"), "Analyze Mode", parent);
+    QAction *analyzeModeAct = new QAction(QIcon(":/icons/analyze_icon.png"), tr("Analyze Mode"), parent);
     toolbar->addAction(analyzeModeAct);
 
-    if (boardWidget)
-    {
-        qDebug() << "[MenuEngine] boardWidget ptr =" << boardWidget;
-
-        if (boardWidget->actChangeMove)
-            toolbar->addAction(boardWidget->actChangeMove);
-
-        else
-            qWarning() << "[MenuEngine] actChangeMove is nullptr!";
-
-        if (boardWidget->actMoveNow)
-            toolbar->addAction(boardWidget->actMoveNow);
-
-        else
-            qWarning() << "[MenuEngine] actMoveNow is nullptr!";
-    }
-    else
-    {
-        qCritical() << "[MenuEngine] boardWidget is nullptr!";
-    }
+    toolbar->addAction(boardWidget->actChangeMove);
+    toolbar->addAction(boardWidget->actMoveNow);
 
     QObject::connect(engineSettingAct, &QAction::triggered, parent, [=]() { QMetaObject::invokeMethod(parent, "onEngineSetting"); });
     QObject::connect(engineBlackAct, &QAction::triggered, parent, [=]()  { QMetaObject::invokeMethod(parent, "onEngineBlack"); });

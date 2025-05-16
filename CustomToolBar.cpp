@@ -45,7 +45,7 @@ CustomToolBar::CustomToolBar(QWidget *parent, ChessBoardWidget *bWidget)
     addSpacer(this, 10);
 
     MenuEngine *engineMenu = new MenuEngine(bWidget);
-    qDebug() << "[CustomToolBar] bWidget ptr =" << bWidget;
+    // qDebug() << "[CustomToolBar] bWidget ptr =" << bWidget;
 
     engineMenu->addEngineActionsToToolBar(this, parent);
     addSpacer(this, 10);

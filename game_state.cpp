@@ -1,7 +1,8 @@
 #include "game_state.h"
 #include <QDebug>
 
-void GameState::reset() {
+void GameState::reset()
+{
     moves.clear();
     current = 0;
 }
@@ -9,23 +10,26 @@ void GameState::reset() {
 void GameState::addMove(const Move& move)
 {
     // delete the following steps if in between
-    if (current < moves.size()) {
+    if (current < moves.size())
+    {
         moves.resize(current);
     }
+
     moves.append(move);
     current++;
 }
 
 void GameState::undoLastMove()
 {
-    if (current > 0) {
+    if (current > 0)
         current--;
-    }
+
 }
 
 void GameState::applyMove(int index)
 {
-    if (index < 0 || index > moves.size()) return;
+    if (index < 0 || index > moves.size())
+        return;
 
     qDebug() << "Apply board to move index" << index;
 

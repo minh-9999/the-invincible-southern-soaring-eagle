@@ -34,26 +34,31 @@
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("  Souther Immotal Chess  ");
+    setWindowTitle("  The Invincible Southern Soaring Eagle  ");
 
     background = new BackgroundWidget(this);
-    // chessBoard = new ChessBoardWidget(this);
+    setCentralWidget(background);
+
     chessBoard = new ChessBoardWidget(background); // parent is background
+    chessBoard->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    // chessBoard->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    // chessBoard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
 
     QVBoxLayout* layout = new QVBoxLayout(background);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(chessBoard, 0, Qt::AlignTop | Qt::AlignLeft);
+    // layout->addWidget(chessBoard, 1, Qt::AlignTop | Qt::AlignLeft);
 
-    ClockWidget *clockWidget = new ClockWidget(background);
+
+    clockWidget = new ClockWidget(background);
+    clockWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     layout->addWidget(clockWidget, 0, Qt::AlignLeft);
-
-    setCentralWidget(background);
 
     fileMenus(this);
     positionMenus(this);
     moveMenus(this);
 
-    // menuEngine = new MenuEngine(this);
     menuEngine = new MenuEngine(chessBoard);
     menuEngine->engineMenus(this);
 
@@ -93,6 +98,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     CustomToolBar_2 *connectionToolBar= new CustomToolBar_2(mainToolBar, this);
     addToolBar(Qt::TopToolBarArea, connectionToolBar);
+
+    menuView->bindToolBars(mainToolBar, connectionToolBar);
 }
 
 MainWindow::~MainWindow()
@@ -116,9 +123,9 @@ void MainWindow::openGame()
 {
     QString fileName = QFileDialog::getOpenFileName(
         this,
-        "Open Game",
+        tr("Open Game"), // dialog title
         "",
-        "Game Files (*.pgn *.che *.xqf *.mxq);;All Files (*)"
+        tr("Game Files (*.pgn *.che *.xqf *.mxq);;All Files (*)") // file filter
     );
 
     if (!fileName.isEmpty()) {
@@ -128,27 +135,36 @@ void MainWindow::openGame()
 
 void MainWindow::saveGame()
 {
-    if (currentFileName.isEmpty()) {
+    if (currentFileName.isEmpty())
+    {
         saveGameAs();
         return;
     }
 
     // Save the file in PGN or XQF format depending on the file extension.
-    if (currentFileName.endsWith(".pgn")) {
+    if (currentFileName.endsWith(".pgn"))
+    {
         chessBoard->saveAsPGN(currentFileName);
     }
-    else if (currentFileName.endsWith(".xqf")) {
+    else if (currentFileName.endsWith(".xqf"))
+    {
         chessBoard->saveAsXQF(currentFileName);
     }
-    else {
-        qWarning() << "Unsupported file format!";
+    else
+    {
+        QMessageBox::warning(this, tr("Save Error"), tr("Unsupported file format!"));
     }
 }
 
 
 void MainWindow::saveGameAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, "Save Game As", "", "XQF Files (*.xqf)");
+    QString fileName = QFileDialog::getSaveFileName(
+        this,
+        tr("Save Game As"), // dialog title
+        "",
+        tr("XQF Files (*.xqf)") // format filter
+    );
 
     if (!fileName.isEmpty())
     {
@@ -159,7 +175,9 @@ void MainWindow::saveGameAs()
 
 void MainWindow::showGameProperties()
 {
-    QMessageBox::information(this, "Game Properties", "Game information will be displayed here.");
+    QMessageBox::information(this,
+                             tr("Game Properties"),
+                             tr("Game information will be displayed here."));
 }
 
 
@@ -167,13 +185,14 @@ void MainWindow::showGameProperties()
 
 void MainWindow::editPosition()
 {
-    QMessageBox::information(this, "Edit Position", "Edit chess position.");
+    QMessageBox::information(this, tr("Edit Position"), tr("Edit chess position."));
 }
+
 
 void MainWindow::reverseBoard()
 {
     chessBoard->reverseBoard();
-    QMessageBox::information(this, "Reverse Position", "The chess position has been rotated..");
+    QMessageBox::information(this, "Reverse Position", "The chess position has been rotated.");
 }
 
 void MainWindow::copyPosition()
@@ -181,7 +200,7 @@ void MainWindow::copyPosition()
     QString positionData = chessBoard->getPositionData();
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(positionData);
-    QMessageBox::information(this, "Copy Position", "Chess position copied.");
+    QMessageBox::information(this, tr("Copy Position"), tr("Chess position copied."));
 }
 
 void MainWindow::copyMoveList()
@@ -189,7 +208,7 @@ void MainWindow::copyMoveList()
     QString moveList = chessBoard->getMoveList();
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(moveList);
-    QMessageBox::information(this, "Copy MoveList", "List of moves copied.");
+    QMessageBox::information(this, tr("Copy MoveList"), tr("List of moves copied."));
 }
 
 void MainWindow::pastePosition()
@@ -200,18 +219,19 @@ void MainWindow::pastePosition()
     if (chessBoard->isValidPositionData(clipboardData))
     {
         chessBoard->setPositionData(clipboardData);
-        QMessageBox::information(this, "Paste Position", "Chess position has been pasted.");
+        QMessageBox::information(this, tr("Paste Position"), tr("Chess position has been pasted."));
     }
     else if (chessBoard->isValidMoveList(clipboardData))
     {
         chessBoard->setMoveList(clipboardData);
-        QMessageBox::information(this, "Paste MoveList", "The list of moves has been pasted..");
+        QMessageBox::information(this, tr("Paste MoveList"), tr("The list of moves has been pasted."));
     }
     else
     {
-        QMessageBox::warning(this, "Invalid Data", "Invalid paste data.");
+        QMessageBox::warning(this, tr("Invalid Data"), tr("Invalid paste data."));
     }
 }
+
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -285,7 +305,7 @@ void MainWindow::About()
 {
     // Create About dialog with version information and image
     QDialog *aboutDialog = new QDialog(this, Qt::Window | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
-    aboutDialog->setWindowTitle("About");
+    aboutDialog->setWindowTitle(tr("About"));
     aboutDialog->resize(800, 600);
 
     // Layout
@@ -327,27 +347,36 @@ void MainWindow::About()
 
 void MainWindow::loadLanguage(const QString& langCode)
 {
-    qDebug() << "Language changed to:" << langCode;
-
-    // Load the corresponding .qm file:
     static QTranslator translator;
 
-    // Delete old translator (if any)
     qApp->removeTranslator(&translator);
 
     QString qmPath = ":/i18n/translations/chess_" + langCode + ".qm";
-    if (translator.load(qmPath))
+
+    if (!translator.load(qmPath))
     {
-        qApp->installTranslator(&translator);
-    }
-    else
-    {
-        qDebug() << "Failed to load translation:" << qmPath;
+        // Fallback gets the language part (eg: vi from vi_VN)
+        QString langOnly = langCode.section('_', 0, 0);
+        qmPath = ":/i18n/translations/chess_" + langOnly + ".qm";
+
+        if (!translator.load(qmPath))
+        {
+            QMessageBox::warning(nullptr,
+                                 tr("Language Load Failed"),
+                                 tr("Failed to load translation:\n%1").arg(qmPath));
+            return;
+        }
     }
 
-    // After installing the translator, you need to update the UI
+    qApp->installTranslator(&translator);
+    QMessageBox::information(nullptr,
+                             tr("Language Change"),
+                             tr("Language changed to: %1").arg(langCode));
+
     this->retranslateUi();
 }
+
+
 
 void MainWindow::retranslateUi()
 {

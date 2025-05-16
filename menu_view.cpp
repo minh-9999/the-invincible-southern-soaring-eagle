@@ -1,80 +1,60 @@
 #include "menu_view.h"
 #include "menu_utils.h"
 
+#include <QStatusBar>
 
-MenuView::MenuView(QObject* parent): QObject(parent)
+
+MenuView::MenuView(QMainWindow* mWindow, QWidget* parent)
+    : QObject(parent), mMainWindow(mWindow)
 {
+
 }
 
 void MenuView::viewMenus(QMainWindow* window)
 {
-    QMenu* viewMenu = new QMenu("View", window);
+    QMenu* viewMenu = new QMenu(tr("View"), window);
 
-    QAction* toolbarAction = viewMenu->addAction("ToolBar");
-    // toolbarAction = new QAction("ToolBar", this);
+    QAction* toolbarAction = viewMenu->addAction(tr("ToolBar"));
     toolbarAction->setCheckable(true);
     toolbarAction->setChecked(true);
 
-    QAction* statusBarAction = viewMenu->addAction("StatusBar");
-    // statusBarAction = new QAction("StatusBar", this);
+    QAction* statusBarAction = viewMenu->addAction(tr("StatusBar"));
     statusBarAction->setCheckable(true);
     statusBarAction->setChecked(true);
 
-    viewMenu->addSeparator();
-    // MenuUtils::addFullWidthSeparator(viewMenu, 2);
+    // viewMenu->addSeparator();
+    MenuUtils::addFullWidthSeparator(viewMenu, 2);
 
-    QAction* moveListAction = viewMenu->addAction("MoveList Window");
-    // moveListAction = new QAction("MoveList Window", this);
+    QAction* moveListAction = viewMenu->addAction(tr("MoveList Window"));
     moveListAction->setCheckable(true);
     moveListAction->setChecked(true);
 
-    QAction* engineWindowAction = viewMenu->addAction("Engine Window");
-    // engineWindowAction = new QAction("Engine Window", this);
+    QAction* engineWindowAction = viewMenu->addAction(tr("Engine Window"));
     engineWindowAction->setCheckable(true);
     engineWindowAction->setChecked(true);
 
-    QAction* openBookWindowAction = viewMenu->addAction("OpenBook Window");
-    // openBookWindowAction = new QAction("OpenBook Window", this);
+    QAction* openBookWindowAction = viewMenu->addAction(tr("OpenBook Window"));
     openBookWindowAction->setCheckable(true);
     openBookWindowAction->setChecked(true);
 
-    QAction* secondaryBookWindowAction = viewMenu->addAction("SecondaryBook Window");
-    // secondaryBookWindowAction = new QAction("SecondaryBook Window", this);
+    QAction* secondaryBookWindowAction = viewMenu->addAction(tr("SecondaryBook Window"));
     secondaryBookWindowAction->setCheckable(true);
     secondaryBookWindowAction->setChecked(true);
 
-    QAction* cloudBookWindowAction = viewMenu->addAction("CloudBook Window");
-    // cloudBookWindowAction = new QAction("CloudBook Window", this);
+    QAction* cloudBookWindowAction = viewMenu->addAction(tr("CloudBook Window"));
     cloudBookWindowAction->setCheckable(true);
     cloudBookWindowAction->setChecked(true);
 
-    viewMenu->addSeparator();
-    // MenuUtils::addFullWidthSeparator(viewMenu, 6);
+    // viewMenu->addSeparator();
+    MenuUtils::addFullWidthSeparator(viewMenu, 2);
 
-    QMenu* schemeMenu = viewMenu->addMenu("Window Scheme");
+    QMenu* schemeMenu = viewMenu->addMenu(tr("Window Scheme"));
 
-    QAction* saveSchemeAction = schemeMenu->addAction("Save Current Scheme");
-    // saveSchemeAction = new QAction("Save Current Scheme", this);
-    QAction* deleteSchemeAction = schemeMenu->addAction("Delete A Scheme");
-    // deleteSchemeAction = new QAction("Delete A Scheme", this);
-    QAction* restoreDefaultSchemeAction = schemeMenu->addAction("Restore Default Scheme");
-    // restoreDefaultSchemeAction = new QAction("Restore Default Scheme", this);
+    QAction* saveSchemeAction = schemeMenu->addAction(tr("Save Current Scheme"));
+    QAction* deleteSchemeAction = schemeMenu->addAction(tr("Delete A Scheme"));
+    QAction* restoreDefaultSchemeAction = schemeMenu->addAction(tr("Restore Default Scheme"));
 
     window->menuBar()->addMenu(viewMenu);
-
-    // viewMenu->addAction(toolbarAction);
-    // viewMenu->addAction(statusBarAction);
-    // viewMenu->addSeparator();
-    // viewMenu->addAction(moveListAction);
-    // viewMenu->addAction(engineWindowAction);
-    // viewMenu->addAction(openBookWindowAction);
-    // viewMenu->addAction(secondaryBookWindowAction);
-    // viewMenu->addAction(cloudBookWindowAction);
-    // viewMenu->addSeparator();
-
-    // schemeMenu->addAction(saveSchemeAction);
-    // schemeMenu->addAction(deleteSchemeAction);
-    // schemeMenu->addAction(restoreDefaultSchemeAction);
 
     connect(toolbarAction, &QAction::toggled, this, &MenuView::toggleToolBar);
     connect(statusBarAction, &QAction::toggled, this, &MenuView::toggleStatusBar);
@@ -89,6 +69,13 @@ void MenuView::viewMenus(QMainWindow* window)
 
 }
 
+
+void MenuView::bindToolBars(CustomToolBar* tbar1, CustomToolBar_2* tbar2)
+{
+    mtoolbar_1 = tbar1;
+    mtoolbar_2 = tbar2;
+}
+
 // QMenu* MenuView::getMenu() const
 // {
 //     // return viewMenus;
@@ -96,30 +83,27 @@ void MenuView::viewMenus(QMainWindow* window)
 
 void MenuView::toggleToolBar(bool checked)
 {
-    // Handles toolbar toggle
-    if (checked) {
-        // Shows toolbar
-    }
-    else {
-        // Hides toolbar
+    if (mtoolbar_1 && mtoolbar_2)
+    {
+        mtoolbar_1->setVisible(checked);
+        mtoolbar_2->setVisible(checked);
     }
 }
 
+
 void MenuView::toggleStatusBar(bool checked)
 {
-    // Handles status bar toggle
-    if (checked) {
-        // Shows status bar
-    }
-    else {
-        // Hides status bar
-    }
+    if (!mMainWindow) return;
+
+    checked ? mMainWindow->statusBar()->show() :
+            mMainWindow->statusBar()->hide();
 }
 
 void MenuView::toggleMoveListWindow(bool checked)
 {
     // Handles MoveList window toggle
-    if (checked) {
+    if (checked)
+    {
         // Shows MoveList window
     }
     else {
@@ -130,10 +114,12 @@ void MenuView::toggleMoveListWindow(bool checked)
 void MenuView::toggleEngineWindow(bool checked)
 {
     // Handles Engine window toggle
-    if (checked) {
+    if (checked)
+    {
         // Shows window Engine
     }
-    else {
+    else
+    {
         // Hide Engine window
     }
 }
@@ -141,10 +127,12 @@ void MenuView::toggleEngineWindow(bool checked)
 void MenuView::toggleOpenBookWindow(bool checked)
 {
     // Handle OpenBook window on/off
-    if (checked) {
+    if (checked)
+    {
         // Show OpenBook window
     }
-    else {
+    else
+    {
         // Hide OpenBook window
     }
 }
@@ -152,10 +140,12 @@ void MenuView::toggleOpenBookWindow(bool checked)
 void MenuView::toggleSecondaryBookWindow(bool checked)
 {
     // Handle SecondaryBook window on/off
-    if (checked) {
+    if (checked)
+    {
         // Show SecondaryBook window
     }
-    else {
+    else
+    {
         // Hide SecondaryBook window
     }
 }
@@ -163,10 +153,12 @@ void MenuView::toggleSecondaryBookWindow(bool checked)
 void MenuView::toggleCloudBookWindow(bool checked)
 {
     // Handle CloudBook window on/off
-    if (checked) {
+    if (checked)
+    {
         // Show CloudBook window
     }
-    else {
+    else
+    {
         // Hide CloudBook window
     }
 }

@@ -7,13 +7,18 @@
 #include <QAction>
 #include <QObject>
 
+#include "CustomToolBar_2.h"
+
 class MenuView: public QObject
 {
     Q_OBJECT
 
 public:
-    explicit MenuView(QObject *parent = nullptr);
+    explicit MenuView(QMainWindow* mWindow, QWidget *parent = nullptr);
+
     void viewMenus(QMainWindow* window);
+
+    void bindToolBars(CustomToolBar* tbar1, CustomToolBar_2* tbar2);
 
     // QMenu* getMenu() const;
 
@@ -43,6 +48,13 @@ private slots:
     void saveCurrentScheme();
     void deleteScheme();
     void restoreDefaultScheme();
+
+private:
+
+    CustomToolBar *mtoolbar_1;
+    CustomToolBar_2 *mtoolbar_2;
+
+    QMainWindow* mMainWindow;
 };
 
 #endif // MENU_VIEW_H

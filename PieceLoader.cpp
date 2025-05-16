@@ -2,47 +2,50 @@
 #include <QDebug>
 #include <QPainter>
 
-QPixmap PieceLoader::loadPiecePixmap(PieceType type, bool isRed, ChessBoardWidget::BoardSize size)
+QPixmap PieceLoader::loadPiecePixmap(PieceType type, bool isRed, ChessBoardWidget::BoardSize boardSize)
 {
     QString sizeFolder;
-    switch (size) {
-    case ChessBoardWidget::BoardSize::Small:  sizeFolder = "small"; break;
-    case ChessBoardWidget::BoardSize::Medium: sizeFolder = "middle"; break;
-    case ChessBoardWidget::BoardSize::Large:  sizeFolder = "large"; break;
-    case ChessBoardWidget::BoardSize::Mini:   sizeFolder = "mini"; break;
 
-    default:
-        qWarning() << "Unknown board size!";
-        return QPixmap();
+    switch (boardSize)
+    {
+        case ChessBoardWidget::BoardSize::Small:  sizeFolder = "img/small"; break;
+        case ChessBoardWidget::BoardSize::Medium: sizeFolder = "img/middle"; break;
+        case ChessBoardWidget::BoardSize::Large:  sizeFolder = "img/large"; break;
+        case ChessBoardWidget::BoardSize::Mini:   sizeFolder = "img/mini"; break;
+
+        default:
+            qWarning() << "Unknown board size!";
+            return QPixmap();
     }
 
     QString colorPrefix = isRed ? "r" : "b";
     QString typeStr;
-    switch (type) {
 
-    case PieceType::Advisor: typeStr = "a"; break;
-    case PieceType::Bishop:  typeStr = "b"; break;
-    case PieceType::Cannon:  typeStr = "c"; break;
-    case PieceType::King:    typeStr = "k"; break;
-    case PieceType::Knight:  typeStr = "n"; break;
-    case PieceType::Pawn:    typeStr = "p"; break;
-    case PieceType::Rook:    typeStr = "r"; break;
+    switch (type)
+    {
+        case PieceType::Advisor: typeStr = "a"; break;
+        case PieceType::Bishop:  typeStr = "b"; break;
+        case PieceType::Cannon:  typeStr = "c"; break;
+        case PieceType::King:    typeStr = "k"; break;
+        case PieceType::Knight:  typeStr = "n"; break;
+        case PieceType::Pawn:    typeStr = "p"; break;
+        case PieceType::Rook:    typeStr = "r"; break;
 
-    case PieceType::None:
-    default:
-        return QPixmap(); // no peace that doesn't load
+        case PieceType::None:
+        default:
+            return QPixmap(); // no peace that doesn't load
     }
 
     QString path;
-    if (size == ChessBoardWidget::BoardSize::Mini)
+    if (boardSize == ChessBoardWidget::BoardSize::Mini)
     {
-        // for mini, file name must uppercase: ex "RA.BMP"
-        path = QString(":/img/%1/%2%3.BMP").arg(sizeFolder, colorPrefix.toUpper(), typeStr.toUpper());
+        // for mini, file name must uppercase: ex "RA.bmp"
+        path = QString("%1/%2%3.bmp").arg(sizeFolder, colorPrefix.toUpper(), typeStr.toUpper());
     }
     else
     {
         // others size still use lowercase: ex "ra.bmp"
-        path = QString(":/img/%1/%2%3.bmp").arg(sizeFolder, colorPrefix, typeStr);
+        path = QString("%1/%2%3.bmp").arg(sizeFolder, colorPrefix, typeStr);
     }
 
     QPixmap pix(path);

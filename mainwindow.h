@@ -61,6 +61,8 @@ private:
 
     ChessBoardWidget* chessBoard;
     BackgroundWidget* background;
+    ClockWidget *clockWidget;
+
     QString currentFileName;
 
     GameState game;

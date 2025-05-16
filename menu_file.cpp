@@ -1,37 +1,42 @@
 
 #include "menu_file.h"
+#include "menu_utils.h"
+
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
 #include <QIcon>
 #include <QToolBar>
+#include <QCoreApplication>
 
 
 void fileMenus(QMainWindow* window)
 {
-    // menu file
-    QMenu *menuFile = new QMenu("File", window);
+    QMenu *menuFile = new QMenu(QCoreApplication::translate("MenuFile", "File"), window);
 
-    QAction *actNew = menuFile->addAction(QIcon(":/icons/new_icon.png"), "New");
+    QAction *actNew = menuFile->addAction(QIcon(":/icons/new_icon.png"), QCoreApplication::translate("MenuFile", "New"));
     actNew->setShortcut(QKeySequence("Ctrl+N"));
 
-    QAction *actOpen = menuFile->addAction(QIcon(":/icons/open_icon.png"), "Open...");
+    QAction *actOpen = menuFile->addAction(QIcon(":/icons/open_icon.png"), QCoreApplication::translate("MenuFile", "Open..."));
     actOpen->setShortcut(QKeySequence("Ctrl+O"));
 
-    QAction *actSave = menuFile->addAction(QIcon(":/icons/save_icon.png"), "Save");
+    QAction *actSave = menuFile->addAction(QIcon(":/icons/save_icon.png"), QCoreApplication::translate("MenuFile", "Save"));
     actSave->setShortcut(QKeySequence("Ctrl+S"));
 
-    QAction *actSaveAs = menuFile->addAction(QIcon(":/icons/save_as_icon.png"), "Save As...");
+    QAction *actSaveAs = menuFile->addAction(QIcon(":/icons/save_as_icon.png"), QCoreApplication::translate("MenuFile", "Save As..."));
     actSaveAs->setShortcut(QKeySequence("Ctrl+Shift+S"));
 
-    menuFile->addSeparator();
+    // menuFile->addSeparator();
+    MenuUtils::addFullWidthSeparator(menuFile, 2);
 
-    QAction *actExit = menuFile->addAction(QIcon(":/icons/exit_icon.png"), "Exit");
+    QAction *actExit = menuFile->addAction(QIcon(":/icons/exit_icon.png"), QCoreApplication::translate("MenuFile", "Exit"));
     actExit->setShortcut(QKeySequence("Ctrl+Q"));
 
-    QAction *actGameProps = menuFile->addAction(QIcon(":/icons/properties_icon.png"), "Game Properties");
+    QAction *actGameProps = menuFile->addAction(QIcon(":/icons/properties_icon.png"), QCoreApplication::translate("MenuFile", "Game Properties"));
     actGameProps->setShortcut(QKeySequence("Ctrl+P"));
+
     window->menuBar()->addMenu(menuFile);
+
 
     QObject::connect(actNew,    &QAction::triggered, window, [=]() { QMetaObject::invokeMethod(window, "newGame"); });
     QObject::connect(actOpen,   &QAction::triggered, window, [=]() { QMetaObject::invokeMethod(window, "openGame"); });

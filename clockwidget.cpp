@@ -23,8 +23,12 @@ ClockWidget::ClockWidget(QWidget *parent) : QWidget(parent), seconds1(0), second
     // labelPlayer2->setMaximumHeight(40);
 
 
-    QLabel *title1 = new QLabel(QStringLiteral("將 Player1"));
-    QLabel *title2 = new QLabel(QStringLiteral("帥 Player2"));
+    QString titleText1 = QStringLiteral("將 %1").arg(tr("Player1"));
+    QString titleText2 = QStringLiteral("帥 %1").arg(tr("Player2"));
+
+    QLabel *title1 = new QLabel(titleText1);
+    QLabel *title2 = new QLabel(titleText2);
+
     title1->setStyleSheet("color: blue; font-size: 16px;");
     title2->setStyleSheet("color: red; font-size: 16px;");
 

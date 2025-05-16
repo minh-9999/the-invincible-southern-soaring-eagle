@@ -29,7 +29,6 @@ void LanguageMenu::addLanguageOption(QMenu* menu, const QString& name, const QSt
     menu->addAction(action);
 }
 
-
 void LanguageMenu::changeLanguage()
 {
     QAction* action = qobject_cast<QAction*>(sender());
@@ -53,17 +52,14 @@ void LanguageMenu::languageMenus(QMainWindow* window)
 {
     QMenu *languageMenu = new QMenu(tr("Language"), window);
 
-    QActionGroup* group = new QActionGroup(languageMenu);
-    group->setExclusive(true);
-
-    addLanguageOption(languageMenu, "English (Default)", "en", true);
-    addLanguageOption(languageMenu, "Vietnamese", "vi", false);
-    addLanguageOption(languageMenu, "Chinese (Simple)", "zh_CN", false);
-    addLanguageOption(languageMenu, "Chinese (Traditional)", "zh_TW", false);
-    addLanguageOption(languageMenu, "French", "fr", false);
-    addLanguageOption(languageMenu, "Portuguese", "pt", false);
-    addLanguageOption(languageMenu, "Spanish", "es", false);
-    addLanguageOption(languageMenu, "Russian", "ru", false);
+    addLanguageOption(languageMenu, tr("English (Default)"), "en", true);
+    addLanguageOption(languageMenu, tr("Vietnamese"), "vi", false);
+    addLanguageOption(languageMenu, tr("Chinese (Simple)"), "zh_CN", false);
+    addLanguageOption(languageMenu, tr("Chinese (Traditional)"), "zh_TW", false);
+    addLanguageOption(languageMenu, tr("French"), "fr", false);
+    addLanguageOption(languageMenu, tr("Portuguese"), "pt", false);
+    addLanguageOption(languageMenu, tr("Spanish"), "es", false);
+    addLanguageOption(languageMenu, tr("Russian"), "ru", false);
 
     window->menuBar()->addMenu(languageMenu);
 

@@ -14,6 +14,7 @@ private:
     QStringList backgroundImages;
     int currentBackgroundIndex = 0;
 
+    QString baseImagePath;
 
 public:
     QAction *toggleBackgroundAction;

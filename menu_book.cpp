@@ -17,13 +17,13 @@ void MenuBook::bookMenus(QMainWindow* window)
     QAction *openBookSettingsAct = bookMenu->addAction(
         QIcon(":/icons/book_settings_icon.png"),
         tr("OpenBook Settings")
-        );
+    );
     openBookSettingsAct->setShortcut(Qt::Key_F10);
 
     QAction *addMovesToBookAct = bookMenu->addAction(
         QIcon(":/icons/book_add_icon.png"),
         tr("Add Moves To OpenBook")
-        );
+    );
     addMovesToBookAct->setShortcut(Qt::Key_F11);
 
     QAction *enableOpenBookAct = bookMenu->addAction(tr("Enable OpenBook"));
@@ -40,18 +40,20 @@ void MenuBook::bookMenus(QMainWindow* window)
 
 void MenuBook::onOpenBookSettings()
 {
-    QMessageBox::information(nullptr, "OpenBook Settings", "Here you can configure OpenBook settings.");
+    QMessageBox::information(nullptr, tr("OpenBook Settings"), tr("Here you can configure OpenBook settings."));
 }
 
 void MenuBook::onAddMovesToBook()
 {
-
-    QMessageBox::information(nullptr, "Add Moves", "Moves have been added to the OpenBook.");
+    QMessageBox::information(nullptr, tr("Add Moves"), tr("Moves have been added to the OpenBook."));
 }
 
 void MenuBook::onEnableOpenBookToggled(bool checked)
 {
     openBookEnabled = checked;
-    qDebug() << "OpenBook enabled:" << openBookEnabled;
+    QMessageBox::information(nullptr,
+                             tr("OpenBook enabled"),
+                             tr("OpenBook is now %1.").arg(openBookEnabled ? tr("enabled") : tr("disabled")));
 }
+
 

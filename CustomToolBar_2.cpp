@@ -1,7 +1,6 @@
 #include "CustomToolBar_2.h"
 #include "menu_connection.h"
 
-
 #include <QComboBox>
 
 

@@ -46,6 +46,9 @@ public:
     explicit ChessBoardWidget(QWidget *parent = nullptr, BoardSize size = BoardSize::Medium);
 
     void setBoardSize(BoardSize size);
+
+    QSize sizeHint() const override;
+
     void resetBoard();
 
     QPoint cellToPixel(int row, int col) const;
@@ -117,6 +120,8 @@ private:
     QVector<QVector<Piece>> board;
     QPoint selectedCell = {-1, -1}; // currently selected cell
     QPixmap boardImage; // chessboard background image
+
+    QString baseImagePath;
 
     int currentMoveIndex = 0; // Current move index
     QVector<QString> moves;   //list of moves, examples: ["炮二平五", "马８进７", ...]
