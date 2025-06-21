@@ -12,7 +12,8 @@ A modern, cross-platform Chinese Chess (Xiangqi) game with sleek UI, player time
 - 🎨 Intuitive UI with styled labels and custom board
 - ♟️ Traditional Chinese pieces with animated moves (planned)
 - 🔌 Modular design ready for AI engine (PGN/XQF/CHE/MXQ support)
-- 💻 Cross-platform: tested on Windows, macOS, Linux
+- 🧩 Easily extensible architecture for plugins and custom rules
+
 
 
 ![Screenshot](https://i.ibb.co/zvKStGT/anh-mieu-ta.png)
@@ -74,7 +75,7 @@ Issues, ideas, and optimization tricks are welcome in the: https://github.com/mi
 
 ## 📝 License
 
-This project is licensed under the **GNU General Public License v3.0 (GPLv3)**.
+This project is licensed under the **GNU General Public License 3.0 (GPLv3)**.
 
 You are free to use, modify, and distribute this software, but any distributed modifications or derivative works **must also be licensed under GPLv3**. This ensures that the software and any improvements remain free and open.
 
