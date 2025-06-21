@@ -1,0 +1,154 @@
+<RCC>
+    <qresource prefix="/">
+	
+        <!-- <file>img/mini/board.bmp</file> -->
+        <!-- <file>img/mini/RA.BMP</file> -->
+        <!-- <file>img/mini/RB.BMP</file> -->
+        <!-- <file>img/mini/RC.BMP</file> -->
+        <!-- <file>img/mini/RK.BMP</file> -->
+        <!-- <file>img/mini/RN.BMP</file> -->
+        <!-- <file>img/mini/RP.BMP</file> -->
+        <!-- <file>img/mini/RR.BMP</file> -->
+        <!-- <file>img/mini/BA.BMP</file> -->
+        <!-- <file>img/mini/BB.BMP</file> -->
+        <!-- <file>img/mini/BC.BMP</file> -->
+        <!-- <file>img/mini/BK.BMP</file> -->
+        <!-- <file>img/mini/BN.BMP</file> -->
+        <!-- <file>img/mini/BP.BMP</file> -->
+        <!-- <file>img/mini/BR.BMP</file> -->
+		
+        <!-- <file>img/small/board.bmp</file> -->
+        <!-- <file>img/small/ra.bmp</file> -->
+        <!-- <file>img/small/rb.bmp</file> -->
+        <!-- <file>img/small/rc.bmp</file> -->
+        <!-- <file>img/small/rk.bmp</file> -->
+        <!-- <file>img/small/rn.bmp</file> -->
+        <!-- <file>img/small/rp.bmp</file> -->
+        <!-- <file>img/small/rr.bmp</file> -->
+        <!-- <file>img/small/ba.bmp</file> -->
+        <!-- <file>img/small/bb.bmp</file> -->
+        <!-- <file>img/small/bc.bmp</file> -->
+        <!-- <file>img/small/bk.bmp</file> -->
+        <!-- <file>img/small/bn.bmp</file> -->
+        <!-- <file>img/small/bp.bmp</file> -->
+        <!-- <file>img/small/br.bmp</file> -->
+		
+        <!-- <file>img/middle/board.bmp</file> -->
+        <!-- <file>img/middle/ra.bmp</file> -->
+        <!-- <file>img/middle/rb.bmp</file> -->
+        <!-- <file>img/middle/rc.bmp</file> -->
+        <!-- <file>img/middle/rk.bmp</file> -->
+        <!-- <file>img/middle/rn.bmp</file> -->
+        <!-- <file>img/middle/rp.bmp</file> -->
+        <!-- <file>img/middle/rr.bmp</file> -->
+        <!-- <file>img/middle/ba.bmp</file> -->
+        <!-- <file>img/middle/bb.bmp</file> -->
+        <!-- <file>img/middle/bc.bmp</file> -->
+        <!-- <file>img/middle/bk.bmp</file> -->
+        <!-- <file>img/middle/bn.bmp</file> -->
+        <!-- <file>img/middle/bp.bmp</file> -->
+        <!-- <file>img/middle/br.bmp</file> -->
+		
+        <!-- <file>img/large/board.bmp</file> -->
+        <!-- <file>img/large/ra.bmp</file> -->
+        <!-- <file>img/large/rb.bmp</file> -->
+        <!-- <file>img/large/rc.bmp</file> -->
+        <!-- <file>img/large/rk.bmp</file> -->
+        <!-- <file>img/large/rn.bmp</file> -->
+        <!-- <file>img/large/rp.bmp</file> -->
+        <!-- <file>img/large/rr.bmp</file> -->
+        <!-- <file>img/large/ba.bmp</file> -->
+        <!-- <file>img/large/bb.bmp</file> -->
+        <!-- <file>img/large/bc.bmp</file> -->
+        <!-- <file>img/large/bk.bmp</file> -->
+        <!-- <file>img/large/bn.bmp</file> -->
+        <!-- <file>img/large/bp.bmp</file> -->
+        <!-- <file>img/large/br.bmp</file> -->
+		
+        <!-- <file>img/bg/bg1.jpg</file> -->
+        <!-- <file>img/bg/bg2.jpg</file> -->
+        <!-- <file>img/bg/bg3.jpg</file> -->
+        <!-- <file>img/bg/bg4.jpg</file> -->
+        <!-- <file>img/bg/bg5.jpg</file> -->
+        <!-- <file>img/bg/bg6.jpg</file> -->
+        <!-- <file>img/bg/bg7.jpg</file> -->
+        <!-- <file>img/bg/aass.jpg</file> -->
+        <!-- <file>img/bg/bbss.jpg</file> -->
+        <!-- <file>img/bg/ccss.jpg</file> -->
+        <!-- <file>img/bg/ddss.jpg</file> -->
+        <!-- <file>img/bg/eess.jpg</file> -->
+        <!-- <file>img/bg/ffss.jpg</file> -->
+        <!-- <file>img/bg/ggss.jpg</file> -->
+		
+        <file>app_icon.ico</file>
+        <file>icons/change_background_icon.png</file>
+		
+			<!-- Menu File -->
+        <file>icons/new_icon.png</file>
+        <file>icons/open_icon.png</file>
+        <file>icons/save_icon.png</file>
+        <file>icons/save_as_icon.png</file>
+        <file>icons/exit_icon.png</file>
+		
+			<!-- Menu Position -->
+        <file>icons/edit_icon.png</file>
+        <file>icons/reverse_icon.png</file>
+        <file>icons/copy_icon.png</file>
+        <file>icons/copy_moves_icon.png</file>
+        <file>icons/paste_icon.png</file>
+		<file>icons/size_icon.png</file>
+		
+			<!-- Menu Move -->
+        <file>icons/first_icon.png</file>
+        <file>icons/last_icon.png</file>
+        <file>icons/prev_icon.png</file>
+        <file>icons/next_icon.png</file>
+        <file>icons/play_icon.png</file>
+        <file>icons/undo_icon.png</file>
+		
+			<!-- Menu Engine -->
+        <file>icons/setting_icon.png</file>
+        <file>icons/black_icon.png</file>
+        <file>icons/red_icon.png</file>
+        <file>icons/analyze_icon.png</file>
+        <file>icons/change_moves_icon.png</file>
+        <file>icons/moves_now_icon.png</file>
+		
+			<!-- Menu Book -->
+        <file>icons/book_settings_icon.png</file>
+        <file>icons/book_add_icon.png</file>
+
+			<!-- Menu Connection -->
+        <file>icons/connection_settings_icon.png</file>
+        <file>icons/connection_add_icon.png</file>
+        <file>icons/edit_connection_icon.png</file>
+        <file>icons/connect_to_icon.png</file>
+        <file>icons/debug_icon.png</file>
+        <file>icons/manual_icon.png</file>
+        <file>icons/transmit_icon.png</file>
+        <file>icons/auto_click_icon.png</file>						
+		<file>icons/other_settings_icon.png</file>
+		
+			<!-- Menu About -->
+		<file>icons/about_icon.png</file>							
+		<file>icons/help_icon.png</file>
+
+		<file>resources/eagle.jpg</file>
+
+		
+    </qresource>
+	
+	<qresource prefix="/i18n">
+	
+    <!-- <file>translations/chess_vi.qm</file> -->
+    <!-- <file>translations/chess_en.qm</file> -->
+    <!-- <file>translations/chess_zh_CN.qm</file> -->
+    <!-- <file>translations/chess_zh_TW.qm</file> -->
+    <!-- <file>translations/chess_fr.qm</file> -->
+    <!-- <file>translations/chess_pt.qm</file> -->
+    <!-- <file>translations/chess_es.qm</file> -->
+    <!-- <file>translations/chess_ru.qm</file> -->
+		
+	</qresource>
+	
+</RCC>
