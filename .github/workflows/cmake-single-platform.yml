@@ -5,7 +5,7 @@ name: Build Qt CMake Project
 
 on:
   push:
-    branches: ["main"]
+    branches: ["*"] # apply for all
   pull_request:
     branches: ["main"]
 
