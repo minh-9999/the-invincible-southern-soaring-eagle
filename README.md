@@ -18,7 +18,9 @@ A modern, cross-platform Chinese Chess (Xiangqi) game with sleek UI, player time
 
 Screenshot
 
-<img src="https://i.ibb.co/zvKStGT/anh-mieu-ta.png" alt="anh-mieu-ta" border="0">
+<!-- <img src="https://i.ibb.co/zvKStGT/anh-mieu-ta.png" alt="anh-mieu-ta" border="0"> -->
+
+<img src="https://raw.githubusercontent.com/minh-9999/the-invincible-southern-soaring-eagle/refs/heads/feature/dev/resources/UI.PNG" alt="anh-mieu-ta" border="0">
 
 
 ---
