@@ -98,9 +98,15 @@ set(
     dialogs/engine_settings_dialog.h
     dialogs/engine_settings_dialog.cpp
 
+
     # app_icon.rc
 
     ${TS_FILES}
+)
+
+set(
+    UIS
+    dialogs/EngineSettingsDialog.ui
 )
 
 # Optional Windows icon
@@ -129,6 +135,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
       chess
       MANUAL_FINALIZATION
       ${PROJECT_SOURCES}
+      ${UIS}
+
+
 
 
   )
@@ -151,13 +160,17 @@ else()
     if(ANDROID)
         add_library(chess SHARED
             ${PROJECT_SOURCES}
+            ${UIS}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(chess
           ${WIN32_EXECUTABLE_FLAG}
-          ${PROJECT_SOURCES})
+          ${PROJECT_SOURCES}
+          ${UIS}
+        )
+
     endif()
 
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

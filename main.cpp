@@ -1,3 +1,4 @@
+#include "engine_settings_dialog.h"
 #include "mainwindow.h"
 
 #include <QApplication>
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
 
     MainWindow w;
 

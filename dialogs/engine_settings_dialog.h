@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QTableWidget>
 #include <QPushButton>
+#include "ui_EngineSettingsDialog.h"
 
 class EngineSettingsDialog : public QDialog
 {
@@ -18,6 +19,7 @@ private:
     QTabWidget *tabWidget;
     QPushButton *okButton, *cancelButton;
 
+    Ui::EngineSettingsDialog ui;
 
     void setupUI();
     void setupThinkConfigTab(QWidget *tab);

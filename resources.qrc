@@ -113,6 +113,11 @@
         <file>icons/analyze_icon.png</file>
         <file>icons/change_moves_icon.png</file>
         <file>icons/moves_now_icon.png</file>
+		<file>icons/engine_add_icon.png</file>
+		<file>icons/edit_engine_icon.png</file>
+		<file>icons/close_icon.png</file>
+		<file>icons/move_down.png</file>
+		<file>icons/move_up.png</file>
 		
 			<!-- Menu Book -->
         <file>icons/book_settings_icon.png</file>

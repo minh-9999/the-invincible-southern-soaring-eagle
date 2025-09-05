@@ -16,7 +16,10 @@ A modern, cross-platform Chinese Chess (Xiangqi) game with sleek UI, player time
 
 
 
-![Screenshot](https://i.ibb.co/zvKStGT/anh-mieu-ta.png)
+Screenshot
+
+<img src="https://i.ibb.co/zvKStGT/anh-mieu-ta.png" alt="anh-mieu-ta" border="0">
+
 
 ---
 
