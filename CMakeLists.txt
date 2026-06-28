@@ -176,6 +176,11 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+
+target_include_directories(chess PRIVATE
+    "${CMAKE_BINARY_DIR}/chess_autogen/include"
+)
+
 target_link_libraries(
   chess
   PRIVATE Qt${QT_VERSION_MAJOR}::Widgets

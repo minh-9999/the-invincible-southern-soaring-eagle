@@ -1,4 +1,4 @@
-#include "engine_settings_dialog.h"
+#include "dialogs/engine_settings_dialog.h"
 #include "mainwindow.h"
 
 #include <QApplication>
