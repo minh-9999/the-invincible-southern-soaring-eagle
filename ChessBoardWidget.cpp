@@ -303,33 +303,24 @@ QPixmap ChessBoardWidget::addDropShadowEffect(const QPixmap &src)
 
 void ChessBoardWidget::paintEvent(QPaintEvent *event)
 {
-    QPoint boardOffset(20, 20);
-    QPoint pieceOffset(10, 10);
-
     QPainter painter(this);
 
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    // Get the size of the board from the enum BoardSize
-    // QSize size = this->size();
-    QSize size = QSize(width() - boardOffset.x(), height() - boardOffset.y());
+    // Draw the board using the exact rect the grid mapping is based on, so
+    // pieces stay aligned with the printed grid lines at any scale.
+    QRect boardRect = getBoardDisplayRect();
+    QPixmap scaledBoard = boardImage.scaled(boardRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    painter.drawPixmap(boardRect.topLeft(), scaledBoard);
 
-    // Scale the board to the selected size
-    QPixmap scaledBoard = boardImage.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-    // Draw the board
-    // painter.drawPixmap(0, 0, scaledBoard);
-    painter.drawPixmap(boardOffset, scaledBoard);
-
-    // Calculate the size of the squares
     int cols = 9, rows = 10;
-    int cellWidth = width() / cols;
-    int cellHeight = height() / rows;
-    int cellSize = std::min(cellWidth, cellHeight);
 
-    // Use cellSize for the pieces
-    int pieceSize = cellSize; // Pieces can occupy the same area as the squares
+    // Derive the on-screen cell spacing from the displayed board so the piece
+    // size matches the grid regardless of how the board image was scaled.
+    double cellSpacing = 0.0;
+    gridOrigin(cellSpacing);
+    int pieceSize = qRound(cellSpacing); // pieces occupy one grid cell
 
     // Draw pieces from the array board[row][col]
     for (int row = 0; row < rows; ++row)
@@ -341,9 +332,8 @@ void ChessBoardWidget::paintEvent(QPaintEvent *event)
             if (piece.type == PieceType::None)
                 continue;
 
-            // QPoint center = cellToPixel(row, col);
-            // Cell center position after offset and scale
-            QPoint center = cellToPixel(row, col) + pieceOffset;
+            // Center of the target intersection in widget coordinates.
+            QPoint center = cellToPixel(row, col);
 
             QPixmap pixmap = getPiecePixmap(piece);
 
@@ -421,17 +411,12 @@ QPixmap ChessBoardWidget::getPiecePixmap(const Piece& piece) const
 
 void ChessBoardWidget::mousePressEvent(QMouseEvent *event)
 {
-    int cols = 9, rows = 10;
-    int cellWidth = width() / cols;
-    int cellHeight = height() / rows;
-
     QPoint pos = event->position().toPoint();
-    int col = pos.x() / cellWidth;
-    int row = pos.y() / cellHeight;
+    QPoint cell = pixelToCell(pos);
 
-    if (row >= 0 && row < 10 && col >= 0 && col < 9)
+    if (cell.x() >= 0 && cell.y() >= 0)
     {
-        selectedCell = QPoint(col, row);
+        selectedCell = cell; // QPoint(col, row)
         update();
     }
 
@@ -441,65 +426,52 @@ void ChessBoardWidget::mousePressEvent(QMouseEvent *event)
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-QPoint ChessBoardWidget::cellToPixel(int row, int col) const
+QPointF ChessBoardWidget::gridOrigin(double &cellSizeOut) const
 {
-    int leftMargin = 0;
-    int topMargin = 0;
-    int cellSize = 0;
-    int pieceSize = 0;
-    int offsetX = 0;
-    int offsetY = 0;
+    QRect br = getBoardDisplayRect();
 
-    switch(boardSize)
+    if (boardImage.isNull() || boardImage.width() <= 0 || br.width() <= 0)
     {
-    case BoardSize::Large:
-        cellSize = 53;
-        pieceSize = 46;
-        leftMargin = 70;
-        topMargin = 71;
-        offsetX = 2;
-        offsetY = 2;
-        break;
-
-    case BoardSize::Medium:
-        cellSize = 40;
-        pieceSize = 35;
-        leftMargin = 75;
-        topMargin = 68;
-        offsetX = 1;
-        offsetY = 1;
-        break;
-
-    case BoardSize::Small:
-        cellSize = 26;
-        pieceSize = 28;
-        leftMargin = 40;
-        topMargin = 42;
-        offsetX = 1;
-        offsetY = 1;
-        break;
-
-    case BoardSize::Mini:
-        cellSize = 16;
-        pieceSize = 18;
-        leftMargin = 10;
-        topMargin = 12;
-        offsetX = 0;
-        offsetY = 0;
-        break;
-
-    default:
-        break;
+        cellSizeOut = 0.0;
+        return QPointF(br.left(), br.top());
     }
 
-    int centerX = leftMargin + col * cellSize;
-    int centerY = topMargin + row * cellSize;
+    // The board art uses square cells with symmetric margins. For a Xiangqi
+    // board there are 8 horizontal gaps (9 files) and 9 vertical gaps (10
+    // ranks), so on the native image: cell = height - width, and the grid is
+    // centred. These relations are preserved under uniform scaling.
+    double scale = double(br.width()) / double(boardImage.width());
+    double cell  = double(boardImage.height() - boardImage.width()) * scale;
 
-    QPoint offset(20, 20);
+    double marginX = (br.width()  - 8.0 * cell) / 2.0;
+    double marginY = (br.height() - 9.0 * cell) / 2.0;
 
-    return QPoint(centerX - pieceSize / 2 + offsetX,
-                  centerY - pieceSize / 2 + offsetY);
+    cellSizeOut = cell;
+    return QPointF(br.left() + marginX, br.top() + marginY);
+}
 
+QPoint ChessBoardWidget::cellToPixel(int row, int col) const
+{
+    double cell = 0.0;
+    QPointF origin = gridOrigin(cell);
+    return QPoint(qRound(origin.x() + col * cell),
+                  qRound(origin.y() + row * cell));
+}
+
+QPoint ChessBoardWidget::pixelToCell(const QPoint &pos) const
+{
+    double cell = 0.0;
+    QPointF origin = gridOrigin(cell);
+    if (cell <= 0.0)
+        return QPoint(-1, -1);
+
+    int col = qRound((pos.x() - origin.x()) / cell);
+    int row = qRound((pos.y() - origin.y()) / cell);
+
+    if (row < 0 || row > 9 || col < 0 || col > 8)
+        return QPoint(-1, -1);
+
+    return QPoint(col, row);
 }
 
 

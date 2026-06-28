@@ -115,6 +115,12 @@ protected:
     QRect getCellRect(int row, int col) const;
     QPixmap getPiecePixmap(const Piece &piece) const;
 
+    // Top-left grid intersection (file 0, rank 0) in widget coordinates,
+    // plus the on-screen cell spacing. Derived from the displayed board image
+    // so piece placement and click hit-testing always match the grid lines.
+    QPointF gridOrigin(double &cellSizeOut) const;
+    QPoint pixelToCell(const QPoint &pos) const;
+
 private:
 
     QVector<QVector<Piece>> board;
