@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<BoardConfig>
+  <!--棋盘背景图片的文件名. 此文件必须在当前文件夹中.-->
+  <BoardBackgroundPath>board.png</BoardBackgroundPath>
+
+  <!--是否需要绘制棋盘线. 如果棋盘背景图没有棋盘线, 则需要绘制棋盘线, 设置为true; 如果背景图已经有棋盘线, 则不需要再绘制棋盘线, 设置为false-->
+  <NeedDrawBoardLine>true</NeedDrawBoardLine>
+
+  <!--是否需要绘制棋子文字. 如果只有一个通用的无文字的棋子, 则需要软件绘制棋子文字, 设置为true. 
+      如果有14个带有文字的棋子, 则无需软件绘制文字, 设置为false. 比如红帅的文件名为 rk (后缀名可以为任意图片格式的后缀名.).
+  --> 
+  <NeedDrawChessmanForeground>true</NeedDrawChessmanForeground>
+
+  <!--红方棋子背景图片的文件名. 此文件必须在当前文件夹中.-->
+  <RedChessmanBackgroundPath>chessred.png</RedChessmanBackgroundPath>
+
+  <!--黑方棋子背景图片的文件名. 此文件必须在当前文件夹中.-->
+  <BlackChessmanBackgroundPath>chessblack.png</BlackChessmanBackgroundPath>
+
+  <!--棋子文字字体. 更换字体后, 往往还需要调整字体大小, 粗细, 位移等.-->
+  <ChessmanFontPath>CN_HANHKHAI.TTF</ChessmanFontPath>
+
+  <!--棋子字体大小.-->
+  <ChessmanFontSize>1050</ChessmanFontSize>
+
+  <!--棋子字体粗细.-->
+  <ChessmanFontWeight>800</ChessmanFontWeight>
+
+  <!--棋子文字向左的偏移比率. 立体棋子背景图往往文字是向左上方偏移的.-->
+  <ChessmanFontLeftDiff>0.01</ChessmanFontLeftDiff>
+
+  <!--棋子文字向上的偏移比率. 立体棋子背景图往往文字是向左上方偏移的.-->
+  <ChessmanFontTopDiff>0.05</ChessmanFontTopDiff>
+
+  <!--关于本配置文件中的颜色格式说明, 必读!!!!  
+      三个数字分别表示颜色的红色,绿色和蓝色的分量. 每个分量的最大值是255, 最小值是0. 
+      比如 黑色是 (0 0 0), 红色是 (255 0 0), 绿色是 (0 255 0), 黄色是 (255 255 0), 紫色是 (125 0 255).
+      打开Windows画图重新的编辑颜色对话框, 编辑自定义颜色时, 可以看到这红绿蓝三个分量的值. (注意, 不是色调, 饱和度和亮度, 不要看错了.)-->
+
+  <!--Đường nét trên board bàn cờ màu đen là  0 0 0 , màu trắng là 255 255 255-->
+  <BoardLineColorString>255 255 255</BoardLineColorString>
+
+  <!--Màu của quân cờ đỏ màu trắng là 255 255 255, màu đỏ là 255 0 0 -->
+  <RedChessmanFontColorString>255 255 255</RedChessmanFontColorString>
+
+  <!--Màu của quân cờ đen đen là 0 0 0, màu dark blue là 0 0 139 -->
+  <BlackChessmanFontColorString>255 255 255</BlackChessmanFontColorString>
+
+  <!--思考细节提示的第1个箭头的颜色. 请参考上面的颜色格式说明 -->
+  <FirtTipArrowColorString>0 0 240</FirtTipArrowColorString>
+
+  <!--思考细节提示的第1个箭头的不透明度. 1表示不透明, 0表示完全透明, -->
+  <FirtTipArrowOpacity>0.5</FirtTipArrowOpacity>
+
+  <!--思考细节提示的第2个箭头的颜色. 请参考上面的颜色格式说明 -->
+  <SecondTipArrowColorString>0 120 0</SecondTipArrowColorString>
+
+  <!--思考细节提示的第2个箭头的不透明度. 1表示不透明, 0表示完全透明, -->
+  <SecondTipArrowOpacity>0.35</SecondTipArrowOpacity>
+
+  <!--被选中棋子的标记的颜色. 请参考上面的颜色格式说明 -->
+  <ChessmanTagColorString>200 100 0</ChessmanTagColorString>
+
+  <!--暗子背景透明度调整. 255 全透明(不推荐), 0 不透明, 默认100 -->
+  <DarkChessOpacityMaskColorString>100 0 0 0</DarkChessOpacityMaskColorString>
+</BoardConfig>

@@ -1,6 +1,7 @@
 
 ##### skip folders
 build/
+.vscode
 
 
 ##### skip files

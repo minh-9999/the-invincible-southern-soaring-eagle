@@ -14,9 +14,42 @@ A modern, cross-platform Chinese Chess (Xiangqi) game with sleek UI, player time
 - 🔌 Modular design ready for AI engine (PGN/XQF/CHE/MXQ support)
 - 🧩 Easily extensible architecture for plugins and custom rules
 
+## 📁 Project Structure
 
-
-![Screenshot](https://i.ibb.co/zvKStGT/anh-mieu-ta.png)
+```
+src/
+├── main.cpp                 # Application entry point
+├── chess/                   # Chess board, pieces, move generation
+│   ├── ChessBoardWidget.*   # Main board widget with rendering
+│   ├── Piece.*              # Piece definitions
+│   ├── PieceLoader.*        # Piece image loading
+│   ├── MoveGenerator.*      # Move generation logic
+│   ├── BackgroundWidget.*   # Background rendering
+│   ├── clockwidget.*        # Game clock widget
+│   ├── CustomToolBar.*      # Custom toolbars
+│   └── CustomToolBar_2.*    # Secondary toolbar
+├── menus/                   # Menu system
+│   ├── menu_file.*          # File operations (New, Open, Save)
+│   ├── menu_position.*      # Position operations (Edit, Copy, Paste)
+│   ├── menu_move.*          # Move navigation (First, Last, Step)
+│   ├── menu_engine.*        # Engine settings and control
+│   ├── menu_book.*          # Opening book management
+│   ├── menu_connection.*    # Network connection settings
+│   ├── menu_settings.*      # Game settings (sound, clock, themes)
+│   ├── menu_view.*          # View options (toolbars, windows)
+│   ├── menu_help.*          # Help and about
+│   ├── menu_language.*      # Language selection
+│   └── menu_utils.*         # Menu utilities
+├── ui/                      # Main UI components
+│   ├── mainwindow.*         # Main application window
+│   └── mainwindow.ui        # Qt Designer UI file
+├── game/                    # Game logic
+│   ├── game_state.*         # Game state management
+│   ├── move_data.*          # Move data structures
+│   └── player.h             # Player definitions
+└── dialogs/                 # Dialog windows
+    └── engine_settings_dialog.*  # Engine configuration dialog
+```
 
 ---
 
@@ -35,29 +68,21 @@ ninja
 
 ## 📦 Dependencies
 
-Qt 5.15+ or Qt 6.x
-
-CMake 3.16+
-
-Ninja (or make)
-
-Optional: fmtlib, nlohmann/json, ... for extended features
+- Qt 5.15+ or Qt 6.x
+- CMake 3.16+
+- Ninja (or make)
+- Optional: fmtlib, nlohmann/json, ... for extended features
 
 ---
 
 ## 🚀 Roadmap
 
-TUI clock widget
-
-Board display with traditional layout
-
-Load/save game formats (PGN, XQF, CHE, MXQ)
-
-Engine integration (SharkChess, UCCI adapter)
-
-Multiplayer mode
-
-Web UI backend (optional)
+- TUI clock widget
+- Board display with traditional layout
+- Load/save game formats (PGN, XQF, CHE, MXQ)
+- Engine integration (SharkChess, UCCI adapter)
+- Multiplayer mode
+- Web UI backend (optional)
 
 ---
 
@@ -97,4 +122,3 @@ For any questions, suggestions, or collaboration opportunities, feel free to rea
 - **WeChat ID:** ChienThan88
 
 ![WeChat QR](https://i.ibb.co/qYhSfyHy/my-qr.jpg)
-
